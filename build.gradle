@@ -1,0 +1,101 @@
+import java.nio.charset.StandardCharsets
+
+plugins {
+	id "com.gradle.plugin-publish" version "0.10.1"
+	id "groovy"
+	id "java"
+	id "maven"
+}
+
+archivesBaseName = project.name
+group = "com.mageddo"
+
+//install {
+//	repositories {
+//		mavenInstaller {
+//			pom {
+////				artifactId = "com.mageddo.graal.reflection.configuration.generator:"
+//			}
+//		}
+//	}
+//}
+
+version '1.0.0'
+dependencies {
+	compile gradleApi()
+	compile localGroovy()
+}
+
+
+//greadlePlugin {
+//	automatedPublishing = false
+//	plugins {
+//		greetingsPlugin {
+//			id = "com.mageddo.${archivesBaseName}"
+//			displayName = 'Generate Graal Relection Configuration file for all annotated classes'
+//			implementationClass = 'com.mageddo.graal.reflection.configuration.GreetingPlugin'
+//		}
+//	}
+//}
+
+pluginBundle {
+
+	website = "https://github.com/mageddo/graal-reflection-configuration-generator.git"
+	vcsUrl = "https://github.com/mageddo/graal-reflection-configuration-generator.git"
+	description = "Resolve your maven dependencies from a standalone embed maven local repository folder(on the project directory for example)"
+	tags = ["java", "graal"]
+
+	plugins {
+		greetingsPlugin {
+			id = project.name
+			displayName = 'Generate Graal Relection Configuration file for all annotated classes'
+		}
+	}
+}
+
+
+subprojects {
+
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
+
+	apply plugin: 'java'
+	apply plugin: 'maven'
+
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+
+	compileTestJava {
+		sourceCompatibility = JavaVersion.VERSION_11
+		targetCompatibility = JavaVersion.VERSION_11
+	}
+
+	configurations {
+		provided
+	}
+
+	sourceSets {
+		main {
+			compileClasspath += configurations.provided
+			test.compileClasspath += configurations.provided
+			test.runtimeClasspath += configurations.provided
+		}
+	}
+
+	tasks.withType(JavaCompile) {
+		options.encoding = StandardCharsets.UTF_8.displayName()
+	}
+
+}
+
+
+project(':graal-reflection-configuration') {
+	archivesBaseName = 'graal-reflection-configuration'
+	version '1.0.0'
+	dependencies {
+
+	}
+}
+

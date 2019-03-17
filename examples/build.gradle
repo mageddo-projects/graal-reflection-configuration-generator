@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+buildscript {
+	repositories {
+		mavenLocal()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "com.mageddo:graal-reflection-configuration-generator:1.0.0"
+	}
+}
+apply plugin: "com.mageddo.graal-reflection-configuration-generator"
+
+greeting {
+	message = 'Hi'
+	greeter = 'Gradle'
+}
