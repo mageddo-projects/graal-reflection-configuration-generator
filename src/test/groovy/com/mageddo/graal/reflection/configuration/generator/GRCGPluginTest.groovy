@@ -1,5 +1,6 @@
 package com.mageddo.graal.reflection.configuration.generator
 
+
 import org.apache.commons.io.IOUtils
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -9,8 +10,7 @@ import org.junit.rules.TemporaryFolder
 
 import java.nio.file.Paths
 
-import static java.nio.file.Files.newOutputStream
-import static org.apache.commons.io.IOUtils.copy
+import static org.apache.commons.io.FileUtils.copyDirectory
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 
@@ -27,18 +27,25 @@ class GRCGPluginTest {
 		// arrange
 
 		def expectedConfigFile = """[ {
-  "name" : "FruitVO",
+  "name" : "com.mageddo.FruitVO",
   "allDeclaredConstructors" : false,
   "allPublicConstructors" : false,
   "allPublicFields" : false,
   "allPublicMethods" : false,
   "allDeclaredMethods" : false,
   "allDeclaredFields" : false
+}, {
+  "name" : "com.mageddo.PersonVO",
+  "allDeclaredConstructors" : false,
+  "allPublicConstructors" : false,
+  "allPublicFields" : false,
+  "allPublicMethods" : true,
+  "allDeclaredMethods" : false,
+  "allDeclaredFields" : false
 } ]"""
-		def clazzName = "FruitVO.java"
-		def srcPath = testProjectDir.newFolder("src").toPath()
-		copy getClass().getResourceAsStream("/${clazzName}"), newOutputStream(srcPath.resolve(clazzName))
 
+		def srcPath = testProjectDir.newFolder("src").toPath()
+		copyDirectory(Paths.get(getClass().getResource("/classes").getFile()).toFile(), srcPath.toFile())
 		buildFile = testProjectDir.newFile('build.gradle')
 		buildFile << """
 			plugins {
@@ -59,7 +66,7 @@ class GRCGPluginTest {
 			}
 			
 			dependencies {
-				compileOnly ("com.mageddo:graal-reflection-configuration:1.0.0")
+				compileOnly ("com.mageddo:graal-reflection-configuration:1.0.1")
 			}
 			
 		"""

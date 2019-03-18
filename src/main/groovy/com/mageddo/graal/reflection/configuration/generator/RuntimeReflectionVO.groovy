@@ -2,6 +2,8 @@ package com.mageddo.graal.reflection.configuration.generator
 
 import com.mageddo.graal.reflection.configuration.RuntimeReflection
 
+import java.lang.annotation.Annotation
+
 class RuntimeReflectionVO {
 
 	String name
@@ -19,8 +21,12 @@ class RuntimeReflectionVO {
 	boolean allDeclaredFields
 
 	static RuntimeReflectionVO valueOf(Class clazz) {
-		println "> Annotations ${clazz.getAnnotations()}"
-		return Arrays.stream(clazz.getAnnotations())
+
+		Annotation[] annotations = clazz.getAnnotations()
+		if(annotations.length == 0){
+			annotations = clazz.getPackage().getAnnotations()
+		}
+		return Arrays.stream(annotations)
 		.filter( { ann ->
 			return ann.annotationType().getName() == RuntimeReflection.class.getName()
 		})
@@ -40,9 +46,7 @@ class RuntimeReflectionVO {
 			return vo
 		})
 		.findFirst()
-		.orElseThrow({
-			throw new RuntimeException("Cant' find annotation on clazz ${clazz}")
-		})
+		.orElse(null)
 
 	}
 }

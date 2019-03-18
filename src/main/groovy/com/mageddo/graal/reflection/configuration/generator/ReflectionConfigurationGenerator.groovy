@@ -9,10 +9,16 @@ class ReflectionConfigurationGenerator {
 		.enable(SerializationFeature.INDENT_OUTPUT)
 
 	static void generateJson(List<Class> classes, Writer writer) {
-		def runtimeReflections = new ArrayList<RuntimeReflectionVO>(classes.size())
+		def runtimeReflections = new LinkedHashMap<String, RuntimeReflectionVO>(classes.size())
 		classes.each {
-			runtimeReflections.add(RuntimeReflectionVO.valueOf(it))
+			if(runtimeReflections.containsKey(it.getName())){
+				return
+			}
+			def vo = RuntimeReflectionVO.valueOf(it)
+			if(vo != null){
+				runtimeReflections.put(it.getName(), vo)
+			}
 		}
-		mapper.writeValue(writer, runtimeReflections)
+		mapper.writeValue(writer, runtimeReflections.values())
 	}
 }

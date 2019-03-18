@@ -3,7 +3,7 @@ import java.nio.charset.StandardCharsets
 apply plugin: 'maven'
 archivesBaseName = project.name
 group = "com.mageddo"
-version '1.0.0'
+version '1.0.1'
 dependencies {
 
 }
