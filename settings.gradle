@@ -1,3 +1,4 @@
 rootProject.name = 'graal-reflection-configuration-generator'
 
 include ':graal-reflection-configuration'
+include ':examples'

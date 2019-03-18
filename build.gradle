@@ -1,15 +1,42 @@
-import java.nio.charset.StandardCharsets
-
 plugins {
 	id "com.gradle.plugin-publish" version "0.10.1"
 	id "groovy"
-	id "java"
 	id "maven"
 	id "org.jetbrains.gradle.plugin.idea-ext" version "0.4.2"
 	id 'java-gradle-plugin'
-//	id "com.palantir.idea-test-fix" version "0.1.0"
 }
 
+allprojects {
+
+	apply plugin: "java"
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+
+	compileTestJava {
+		sourceCompatibility = JavaVersion.VERSION_11
+		targetCompatibility = JavaVersion.VERSION_11
+	}
+
+	dependencies {
+		testCompile group: 'junit', name: 'junit', version: '4.12'
+	}
+
+}
+
+project(':graal-reflection-configuration') {
+	apply plugin: 'maven'
+	archivesBaseName = project.name
+	version '1.0.0'
+	dependencies {
+
+	}
+}
 
 task fixIdeaPluginClasspath {
 	doFirst {
@@ -31,20 +58,16 @@ idea.project.settings {
 
 archivesBaseName = project.name
 group = "com.mageddo"
-
+version '1.0.0'
 
 dependencies {
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
 	compile ("com.mageddo:graal-reflection-configuration:1.0.0")
 	compile ("org.reflections:reflections:0.9.11")
-	testCompile gradleTestKit()
-	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
-}
-
-version '1.0.0'
-dependencies {
 	compile gradleApi()
 	compile localGroovy()
+	testCompile gradleTestKit()
+	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
 }
 
 pluginBundle {
@@ -56,58 +79,8 @@ pluginBundle {
 
 	plugins {
 		greetingsPlugin {
-			id = project.name
+			id = "${group}.${project.name}"
 			displayName = 'Generate Graal Relection Configuration file for all annotated classes'
 		}
 	}
 }
-
-
-allprojects {
-
-	repositories {
-		mavenCentral()
-		mavenLocal()
-	}
-
-	apply plugin: 'java'
-
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-
-	compileTestJava {
-		sourceCompatibility = JavaVersion.VERSION_11
-		targetCompatibility = JavaVersion.VERSION_11
-	}
-
-	configurations {
-		provided
-	}
-
-	sourceSets {
-		main {
-			compileClasspath += configurations.provided
-			test.compileClasspath += configurations.provided
-			test.runtimeClasspath += configurations.provided
-		}
-	}
-
-	tasks.withType(JavaCompile) {
-		options.encoding = StandardCharsets.UTF_8.displayName()
-	}
-
-	dependencies {
-		testCompile group: 'junit', name: 'junit', version: '4.12'
-	}
-
-}
-
-project(':graal-reflection-configuration') {
-	apply plugin: 'maven'
-	archivesBaseName = 'graal-reflection-configuration'
-	version '1.0.0'
-	dependencies {
-
-	}
-}
-
