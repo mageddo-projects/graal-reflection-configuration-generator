@@ -1,24 +1,45 @@
-import java.nio.charset.StandardCharsets
+import java.nio.charset.StandardCharsets 
 
 plugins {
 	id "com.gradle.plugin-publish" version "0.10.1"
 	id "groovy"
 	id "java"
 	id "maven"
+	id "org.jetbrains.gradle.plugin.idea-ext" version "0.4.2"
+	id 'java-gradle-plugin'
+//	id "com.palantir.idea-test-fix" version "0.1.0"
+}
+
+
+task fixIdeaPluginClasspath {
+	doFirst {
+		configure(tasks.pluginUnderTestMetadata) {
+			def ideaClassesPath = project.buildDir.toPath().resolveSibling("out").resolve("production")
+			def newClasspath = pluginClasspath as List
+			newClasspath.add(0, ideaClassesPath)
+			pluginClasspath.setFrom(newClasspath)
+		}
+	}
+}
+pluginUnderTestMetadata.mustRunAfter(fixIdeaPluginClasspath)
+
+idea.project.settings {
+	taskTriggers {
+		beforeBuild fixIdeaPluginClasspath, pluginUnderTestMetadata
+	}
 }
 
 archivesBaseName = project.name
 group = "com.mageddo"
 
-//install {
-//	repositories {
-//		mavenInstaller {
-//			pom {
-////				artifactId = "com.mageddo.graal.reflection.configuration.generator:"
-//			}
-//		}
-//	}
-//}
+
+dependencies {
+	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
+	compile ("com.mageddo:graal-reflection-configuration:1.0.0")
+	compile ("org.reflections:reflections:0.9.11")
+	testCompile gradleTestKit()
+	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
+}
 
 version '1.0.0'
 dependencies {
@@ -54,7 +75,7 @@ pluginBundle {
 }
 
 
-subprojects {
+allprojects {
 
 	repositories {
 		mavenCentral()
@@ -62,7 +83,6 @@ subprojects {
 	}
 
 	apply plugin: 'java'
-	apply plugin: 'maven'
 
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
@@ -88,10 +108,14 @@ subprojects {
 		options.encoding = StandardCharsets.UTF_8.displayName()
 	}
 
+	dependencies {
+		testCompile group: 'junit', name: 'junit', version: '4.12'
+	}
+
 }
 
-
 project(':graal-reflection-configuration') {
+	apply plugin: 'maven'
 	archivesBaseName = 'graal-reflection-configuration'
 	version '1.0.0'
 	dependencies {
