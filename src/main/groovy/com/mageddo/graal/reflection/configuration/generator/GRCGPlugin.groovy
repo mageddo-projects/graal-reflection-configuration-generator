@@ -5,9 +5,11 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
 import static com.mageddo.graal.reflection.configuration.generator.ReflectionConfigurationGenerator.generateJson
 import static com.mageddo.graal.reflection.configuration.generator.utils.ClassPathUtils.classLoaderOf
+import static com.mageddo.graal.reflection.configuration.generator.utils.ReflectionUtils.getRuntimeReflectionURL
 import static com.mageddo.graal.reflection.configuration.generator.utils.ReflectionUtils.reflectionsOf
 
 class GRCGPlugin implements Plugin<Project> {
@@ -18,16 +20,21 @@ class GRCGPlugin implements Plugin<Project> {
 
 				try {
 					final List<Class> runtimeReflectionClasses = new ArrayList<>()
-					extension.getClassPathOrDefault(project.sourceSets.main.output.classesDirs).each {
+					def classPath =
+					extension
+//						.getClassPathOrDefault(project.sourceSets.main.output.classesDirs)
+						.getClassPathOrDefault(project.sourceSets.main.runtimeClasspath)
+						.files
+						.stream()
+						.map({it.toURI().toURL()})
+						.collect(Collectors.toSet())
 
-						if (it.isFile()) {
-							return
-						}
-						println("> loading ${it}")
-						def reflections = reflectionsOf(classLoaderOf(it))
-						runtimeReflectionClasses.addAll(reflections.getTypesAnnotatedWith(RuntimeReflection.class))
+					classPath.add(getRuntimeReflectionURL())
 
-					}
+					println("> loading classpath ${classPath}")
+					def classLoader = classLoaderOf(classPath)
+					def reflections = reflectionsOf(classLoader, classPath as URL[])
+					runtimeReflectionClasses.addAll(reflections.getTypesAnnotatedWith(RuntimeReflection.class))
 
 					def outFile = Paths.get(extension.getConfigurationFileOrDefault("${project.buildDir}/reflect.json"))
 					outFile.withWriter {
@@ -43,4 +50,5 @@ class GRCGPlugin implements Plugin<Project> {
 			}
 		}
 	}
+
 }

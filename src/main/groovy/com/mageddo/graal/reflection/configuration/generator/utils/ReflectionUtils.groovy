@@ -1,11 +1,13 @@
 package com.mageddo.graal.reflection.configuration.generator.utils
 
+import com.mageddo.graal.reflection.configuration.RuntimeReflection
 import org.reflections.Reflections
 import org.reflections.scanners.SubTypesScanner
 import org.reflections.scanners.TypeAnnotationsScanner
 import org.reflections.util.ConfigurationBuilder
 
 final class ReflectionUtils {
+
 	private ReflectionUtils() {
 	}
 
@@ -20,5 +22,20 @@ final class ReflectionUtils {
 				.setUrls(url)
 		)
 		return reflections
+	}
+
+	static URL getRuntimeReflectionURL() {
+		def clazzInsideJarKey = ".jar!"
+		def clazz = RuntimeReflection.class
+		def url = getResourceAsURL(clazz)
+		def str = url.getFile()
+		if(!str.contains(clazzInsideJarKey)){
+			return url
+		}
+		return new URL(str.substring(0, str.indexOf(clazzInsideJarKey) + 4))
+	}
+
+	private static URL getResourceAsURL(Class clazz) {
+		return clazz.getResource(String.format("%s.class", clazz.getSimpleName()))
 	}
 }

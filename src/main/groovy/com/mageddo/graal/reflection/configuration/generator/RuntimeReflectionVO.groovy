@@ -2,8 +2,6 @@ package com.mageddo.graal.reflection.configuration.generator
 
 import com.mageddo.graal.reflection.configuration.RuntimeReflection
 
-import static java.util.Objects.requireNonNull
-
 class RuntimeReflectionVO {
 
 	String name
@@ -21,22 +19,30 @@ class RuntimeReflectionVO {
 	boolean allDeclaredFields
 
 	static RuntimeReflectionVO valueOf(Class clazz) {
+		println "> Annotations ${clazz.getAnnotations()}"
+		return Arrays.stream(clazz.getAnnotations())
+		.filter( { ann ->
+			return ann.annotationType().getName() == RuntimeReflection.class.getName()
+		})
+		.map({ann ->
+			def vo = new RuntimeReflectionVO()
 
-		println("${clazz}" + Arrays.toString(clazz.get))
+			vo.setName(clazz.getName())
 
-		def ann = requireNonNull(clazz.getAnnotation(RuntimeReflection.class), "There is no annotation for class ${clazz}")
-		def vo = new RuntimeReflectionVO()
+			vo.setAllDeclaredConstructors(ann.allDeclaredConstructors())
+			vo.setAllPublicConstructors(ann.allPublicConstructors())
 
-		vo.setName(clazz.getName())
+			vo.setAllDeclaredFields(ann.allDeclaredFields())
+			vo.setAllPublicFields(ann.allPublicFields())
 
-		vo.setAllDeclaredConstructors(ann.allDeclaredConstructors())
-		vo.setAllPublicConstructors(ann.allPublicConstructors())
+			vo.setAllDeclaredMethods(ann.allDeclaredMethods())
+			vo.setAllPublicMethods(ann.allPublicMethods())
+			return vo
+		})
+		.findFirst()
+		.orElseThrow({
+			throw new RuntimeException("Cant' find annotation on clazz ${clazz}")
+		})
 
-		vo.setAllDeclaredFields(ann.allDeclaredFields())
-		vo.setAllPublicFields(ann.allPublicFields())
-
-		vo.setAllDeclaredMethods(ann.allDeclaredMethods())
-		vo.setAllPublicMethods(ann.allPublicMethods())
-		return vo
 	}
 }

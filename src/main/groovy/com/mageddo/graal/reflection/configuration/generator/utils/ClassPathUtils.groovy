@@ -4,7 +4,11 @@ final class ClassPathUtils {
 
 	private ClassPathUtils(){}
 
-	static ClassLoader classLoaderOf(File file){
+	static URLClassLoader classLoaderOf(File file){
 		return new URLClassLoader([ file.toURI().toURL() ] as URL[])
+	}
+
+	static URLClassLoader classLoaderOf(Iterable<URL> urls){
+		return new URLClassLoader(urls as URL[])
 	}
 }
