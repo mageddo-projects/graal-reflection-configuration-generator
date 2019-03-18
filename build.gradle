@@ -29,15 +29,6 @@ allprojects {
 
 }
 
-project(':graal-reflection-configuration') {
-	apply plugin: 'maven'
-	archivesBaseName = project.name
-	version '1.0.0'
-	dependencies {
-
-	}
-}
-
 task fixIdeaPluginClasspath {
 	doFirst {
 		configure(tasks.pluginUnderTestMetadata) {
