@@ -47,18 +47,6 @@ dependencies {
 	compile localGroovy()
 }
 
-
-//greadlePlugin {
-//	automatedPublishing = false
-//	plugins {
-//		greetingsPlugin {
-//			id = "com.mageddo.${archivesBaseName}"
-//			displayName = 'Generate Graal Relection Configuration file for all annotated classes'
-//			implementationClass = 'com.mageddo.graal.reflection.configuration.GreetingPlugin'
-//		}
-//	}
-//}
-
 pluginBundle {
 
 	website = "https://github.com/mageddo/graal-reflection-configuration-generator.git"

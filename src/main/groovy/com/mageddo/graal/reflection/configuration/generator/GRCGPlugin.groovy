@@ -22,7 +22,6 @@ class GRCGPlugin implements Plugin<Project> {
 					final List<Class> runtimeReflectionClasses = new ArrayList<>()
 					def classPath =
 					extension
-//						.getClassPathOrDefault(project.sourceSets.main.output.classesDirs)
 						.getClassPathOrDefault(project.sourceSets.main.runtimeClasspath)
 						.files
 						.stream()
