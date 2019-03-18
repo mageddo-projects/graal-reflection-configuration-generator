@@ -49,11 +49,11 @@ idea.project.settings {
 
 archivesBaseName = project.name
 group = "com.mageddo"
-version '1.1.0'
+version '2.0.0'
 
 dependencies {
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
-	compile ("com.mageddo:graal-reflection-configuration:1.0.1")
+	compile ("com.mageddo:graal-reflection-configuration:2.0.0")
 	compile ("org.reflections:reflections:0.9.11")
 	compile gradleApi()
 	compile localGroovy()

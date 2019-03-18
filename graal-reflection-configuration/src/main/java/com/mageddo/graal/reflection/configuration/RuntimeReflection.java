@@ -7,16 +7,16 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.PACKAGE})
 public @interface RuntimeReflection {
 
-	boolean allDeclaredConstructors() default false;
+	boolean allDeclaredConstructors() default true;
 
-	boolean allPublicConstructors() default false;
+	boolean allPublicConstructors() default true;
 
-	boolean allPublicFields() default false;
+	boolean allPublicFields() default true;
 
-	boolean allPublicMethods() default false;
+	boolean allPublicMethods() default true;
 
-	boolean allDeclaredMethods() default false;
+	boolean allDeclaredMethods() default true;
 
-	boolean allDeclaredFields() default false;
+	boolean allDeclaredFields() default true;
 
 }

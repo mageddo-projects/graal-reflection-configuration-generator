@@ -28,20 +28,20 @@ class GRCGPluginTest {
 
 		def expectedConfigFile = """[ {
   "name" : "com.mageddo.FruitVO",
-  "allDeclaredConstructors" : false,
-  "allPublicConstructors" : false,
-  "allPublicFields" : false,
-  "allPublicMethods" : false,
-  "allDeclaredMethods" : false,
-  "allDeclaredFields" : false
+  "allDeclaredConstructors" : true,
+  "allPublicConstructors" : true,
+  "allPublicFields" : true,
+  "allPublicMethods" : true,
+  "allDeclaredMethods" : true,
+  "allDeclaredFields" : true
 }, {
   "name" : "com.mageddo.PersonVO",
-  "allDeclaredConstructors" : false,
-  "allPublicConstructors" : false,
-  "allPublicFields" : false,
+  "allDeclaredConstructors" : true,
+  "allPublicConstructors" : true,
+  "allPublicFields" : true,
   "allPublicMethods" : true,
-  "allDeclaredMethods" : false,
-  "allDeclaredFields" : false
+  "allDeclaredMethods" : true,
+  "allDeclaredFields" : true
 } ]"""
 
 		def srcPath = testProjectDir.newFolder("src").toPath()
@@ -66,7 +66,7 @@ class GRCGPluginTest {
 			}
 			
 			dependencies {
-				compileOnly ("com.mageddo:graal-reflection-configuration:1.0.1")
+				compileOnly ("com.mageddo:graal-reflection-configuration:2.0.0")
 			}
 			
 		"""
