@@ -20,7 +20,7 @@ import static com.mageddo.graal.reflection.configuration.generator.utils.Reflect
 
 class GRCGPlugin implements Plugin<Project>  {
 	void apply(Project project) {
-
+		Reflections.log = null
 		def extension = project.getExtensions().create("reflectConfigFiles", GRCGExtension)
 		project.task("reflectConfigFiles") {
 			doLast {
