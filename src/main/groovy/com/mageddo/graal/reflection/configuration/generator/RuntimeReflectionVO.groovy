@@ -21,32 +21,34 @@ class RuntimeReflectionVO {
 	boolean allDeclaredFields
 
 	static RuntimeReflectionVO valueOf(Class clazz) {
+		return Optional
+		.ofNullable(valueOf(clazz.getName(), clazz.getAnnotations()))
+		.orElseGet({
+			return valueOf(clazz.getName(), clazz.getPackage().getAnnotations())
+		})
+	}
 
-		Annotation[] annotations = clazz.getAnnotations()
-		if(annotations.length == 0){
-			annotations = clazz.getPackage().getAnnotations()
-		}
+	static RuntimeReflectionVO valueOf(String className, Annotation[] annotations) {
 		return Arrays.stream(annotations)
-		.filter( { ann ->
-			return ann.annotationType().getName() == RuntimeReflection.class.getName()
-		})
-		.map({ann ->
-			def vo = new RuntimeReflectionVO()
+			.filter({ ann ->
+				return ann.annotationType().getName() == RuntimeReflection.class.getName()
+			})
+			.map({ ann ->
+				def vo = new RuntimeReflectionVO()
 
-			vo.setName(clazz.getName())
+				vo.setName(className)
 
-			vo.setAllDeclaredConstructors(ann.allDeclaredConstructors())
-			vo.setAllPublicConstructors(ann.allPublicConstructors())
+				vo.setAllDeclaredConstructors(ann.allDeclaredConstructors())
+				vo.setAllPublicConstructors(ann.allPublicConstructors())
 
-			vo.setAllDeclaredFields(ann.allDeclaredFields())
-			vo.setAllPublicFields(ann.allPublicFields())
+				vo.setAllDeclaredFields(ann.allDeclaredFields())
+				vo.setAllPublicFields(ann.allPublicFields())
 
-			vo.setAllDeclaredMethods(ann.allDeclaredMethods())
-			vo.setAllPublicMethods(ann.allPublicMethods())
-			return vo
-		})
-		.findFirst()
-		.orElse(null)
-
+				vo.setAllDeclaredMethods(ann.allDeclaredMethods())
+				vo.setAllPublicMethods(ann.allPublicMethods())
+				return vo
+			})
+			.findFirst()
+			.orElse(null)
 	}
 }
