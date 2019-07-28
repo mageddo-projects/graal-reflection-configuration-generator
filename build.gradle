@@ -49,7 +49,7 @@ idea.project.settings {
 
 archivesBaseName = project.name
 group = "com.mageddo"
-version '2.0.1'
+version '2.0.2'
 
 dependencies {
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
