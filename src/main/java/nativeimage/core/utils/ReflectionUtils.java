@@ -1,8 +1,5 @@
 package nativeimage.core.utils;
 
-import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
-import lombok.val;
 import nativeimage.RuntimeReflection;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -10,11 +7,15 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ConfigurationBuilder;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-@UtilityClass
-public class ReflectionUtils {
+public final class ReflectionUtils {
+
+	private ReflectionUtils() {
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+	}
 
 	public static Reflections reflectionsOf(URLClassLoader cl){
 		return reflectionsOf(cl, cl.getURLs());
@@ -29,16 +30,19 @@ public class ReflectionUtils {
 		);
 	}
 
-	@SneakyThrows
 	public static URL getRuntimeReflectionURL() {
-		val clazzInsideJarKey = ".jar!";
-		val clazz = RuntimeReflection.class;
-		val url = getResourceAsURL(clazz);
-		val str = url.getFile();
+		String clazzInsideJarKey = ".jar!";
+		Class clazz = RuntimeReflection.class;
+		URL url = getResourceAsURL(clazz);
+		String str = url.getFile();
 		if(!str.contains(clazzInsideJarKey)){
 			return url;
 		}
-		return new URL(str.substring(0, str.indexOf(clazzInsideJarKey) + clazzInsideJarKey.length()));
+		try {
+			return new URL(str.substring(0, str.indexOf(clazzInsideJarKey) + clazzInsideJarKey.length()));
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
 
 	private static URL getResourceAsURL(Class clazz) {

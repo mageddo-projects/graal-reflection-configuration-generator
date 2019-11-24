@@ -1,15 +1,16 @@
 package nativeimage;
 
-import com.sun.tools.javac.code.Type;
+import jdk.jfr.Experimental;
 import lombok.experimental.UtilityClass;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.type.TypeMirror;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @UtilityClass
+@Experimental
 public class TypeBuilder {
 
 	public static Set<String> of(Element element, RuntimeReflection runtimeReflectionAnn) {
@@ -21,9 +22,13 @@ public class TypeBuilder {
 			return toSet(scanClass);
 		}
 		if(!runtimeReflectionAnn.scanPackage().equals("")){
-			final Set<Class> discover = new PackageClassesDiscover().discover(runtimeReflectionAnn.scanPackage());
-			System.out.println(">>>>> discover " + discover);
-			return toSet("");
+			final Set<Class> discoveredClasses = new PackageClassesDiscover().discover(runtimeReflectionAnn.scanPackage());
+			final Set<String> discoveredClassNames = new LinkedHashSet<>(discoveredClasses.size());
+			for (Class clazz : discoveredClasses) {
+				discoveredClassNames.add(clazz.getName());
+			}
+			System.out.println(">>>>> discoveredClasses " + discoveredClasses);
+			return discoveredClassNames;
 		}
 		return toSet(element.toString());
 	}

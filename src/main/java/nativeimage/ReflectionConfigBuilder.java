@@ -1,5 +1,6 @@
 package nativeimage;
 
+import jdk.jfr.Experimental;
 import lombok.experimental.UtilityClass;
 import nativeimage.core.ReflectionConfig;
 
@@ -7,6 +8,7 @@ import javax.lang.model.element.Element;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Experimental
 @UtilityClass
 public class ReflectionConfigBuilder {
 
