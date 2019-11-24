@@ -1,0 +1,11 @@
+[
+  {
+    "name" : "com.acme.RuntimeReflectionFruit",
+    "allDeclaredConstructors" : false,
+    "allPublicConstructors" : false,
+    "allDeclaredMethods" : false,
+    "allPublicMethods" : false,
+    "allPublicFields" : false,
+    "allDeclaredFields" : false
+  }
+]

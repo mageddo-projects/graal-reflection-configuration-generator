@@ -1,7 +1,7 @@
 package nativeimage.core;
 
 public class ReflectionConfig {
-	private String type;
+	private String name;
 	private boolean allDeclaredConstructors;
 	private boolean allPublicConstructors;
 	private boolean allDeclaredMethods;
@@ -9,8 +9,8 @@ public class ReflectionConfig {
 	private boolean allPublicFields;
 	private boolean allDeclaredFields;
 
-	ReflectionConfig(String type, boolean allDeclaredConstructors, boolean allPublicConstructors, boolean allDeclaredMethods, boolean allPublicMethods, boolean allPublicFields, boolean allDeclaredFields) {
-		this.type = type;
+	ReflectionConfig(String name, boolean allDeclaredConstructors, boolean allPublicConstructors, boolean allDeclaredMethods, boolean allPublicMethods, boolean allPublicFields, boolean allDeclaredFields) {
+		this.name = name;
 		this.allDeclaredConstructors = allDeclaredConstructors;
 		this.allPublicConstructors = allPublicConstructors;
 		this.allDeclaredMethods = allDeclaredMethods;
@@ -23,8 +23,8 @@ public class ReflectionConfig {
 		return new ReflectionConfigBuilder();
 	}
 
-	public String getType() {
-		return this.type;
+	public String getName() {
+		return this.name;
 	}
 
 	public boolean isAllDeclaredConstructors() {
@@ -51,8 +51,8 @@ public class ReflectionConfig {
 		return this.allDeclaredFields;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setAllDeclaredConstructors(boolean allDeclaredConstructors) {
@@ -84,8 +84,8 @@ public class ReflectionConfig {
 		if (!(o instanceof ReflectionConfig)) return false;
 		final ReflectionConfig other = (ReflectionConfig) o;
 		if (!other.canEqual((Object) this)) return false;
-		final Object this$type = this.getType();
-		final Object other$type = other.getType();
+		final Object this$type = this.getName();
+		final Object other$type = other.getName();
 		if (this$type == null ? other$type != null : !this$type.equals(other$type)) return false;
 		if (this.isAllDeclaredConstructors() != other.isAllDeclaredConstructors()) return false;
 		if (this.isAllPublicConstructors() != other.isAllPublicConstructors()) return false;
@@ -103,7 +103,7 @@ public class ReflectionConfig {
 	public int hashCode() {
 		final int PRIME = 59;
 		int result = 1;
-		final Object $type = this.getType();
+		final Object $type = this.getName();
 		result = result * PRIME + ($type == null ? 43 : $type.hashCode());
 		result = result * PRIME + (this.isAllDeclaredConstructors() ? 79 : 97);
 		result = result * PRIME + (this.isAllPublicConstructors() ? 79 : 97);
@@ -115,7 +115,7 @@ public class ReflectionConfig {
 	}
 
 	public String toString() {
-		return "ReflectionConfig(type=" + this.getType() + ", allDeclaredConstructors=" + this.isAllDeclaredConstructors() + ", allPublicConstructors=" + this.isAllPublicConstructors() + ", allDeclaredMethods=" + this.isAllDeclaredMethods() + ", allPublicMethods=" + this.isAllPublicMethods() + ", allPublicFields=" + this.isAllPublicFields() + ", allDeclaredFields=" + this.isAllDeclaredFields() + ")";
+		return "ReflectionConfig(type=" + this.getName() + ", allDeclaredConstructors=" + this.isAllDeclaredConstructors() + ", allPublicConstructors=" + this.isAllPublicConstructors() + ", allDeclaredMethods=" + this.isAllDeclaredMethods() + ", allPublicMethods=" + this.isAllPublicMethods() + ", allPublicFields=" + this.isAllPublicFields() + ", allDeclaredFields=" + this.isAllDeclaredFields() + ")";
 	}
 
 	public static class ReflectionConfigBuilder {

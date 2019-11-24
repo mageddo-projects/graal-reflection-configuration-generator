@@ -3,8 +3,11 @@ dependencies {
 	compileOnly(project(":"))
 	annotationProcessor(project(":"))
 
+	testCompileOnly('com.mageddo:rsl:1.0.0')
+	testAnnotationProcessor('com.mageddo:rsl-compiler:1.0.1')
 	compile "org.junit.jupiter:junit-jupiter:5.4.2"
 	compile "org.mockito:mockito-junit-jupiter:3.1.0"
+	compile "commons-io:commons-io:2.6"
 }
 
 test {

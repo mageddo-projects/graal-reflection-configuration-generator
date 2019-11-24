@@ -7,7 +7,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,34 +15,36 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class AnnotationProcessor extends AbstractProcessor {
 
-	private Set<ReflectionConfig> classes = new LinkedHashSet<>();
+	private Set<ReflectionConfig> classes;
 	private Messager messager;
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
 		super.init(processingEnv);
 		this.messager = this.processingEnv.getMessager();
+		this.classes = new LinkedHashSet<>();
 	}
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+		final boolean processingOver = roundEnv.processingOver();
 		messager.printMessage(Diagnostic.Kind.NOTE, String.format(">> process: %s, annotations=%s %n", roundEnv, annotations));
-		if (annotations.isEmpty()) {
-			return true;
-		}
 		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RuntimeReflection.class);
-		for (Element element : elements) {
-			messager.printMessage(Diagnostic.Kind.NOTE, String.format(":> %s%n", element));
-			classes.addAll(ReflectionConfigBuilder.of(element));
+		if (!annotations.isEmpty()) {
+			for (Element element : elements) {
+				messager.printMessage(Diagnostic.Kind.NOTE, String.format(":> %s%n", element));
+				classes.addAll(ReflectionConfigBuilder.of(element));
+			}
 		}
 
-		if (roundEnv.processingOver()) {
+		if (processingOver) {
 			writeObjects();
 		}
 		return false;
 	}
 
 	private void writeObjects() {
+		messager.printMessage(Diagnostic.Kind.NOTE, "writing objects: " + this.classes.size());
 		ReflectionConfigAppenderAnnotationProcessing appender = null;
 		try {
 			appender = new ReflectionConfigAppenderAnnotationProcessing(processingEnv);

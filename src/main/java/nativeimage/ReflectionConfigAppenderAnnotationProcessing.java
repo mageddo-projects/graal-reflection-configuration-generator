@@ -1,47 +1,52 @@
 package nativeimage;
 
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SequenceWriter;
 import nativeimage.core.ReflectionConfig;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
 import javax.tools.FileObject;
-import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class ReflectionConfigAppenderAnnotationProcessing implements ReflectionConfigAppender, Closeable {
 
 	private final FileObject fileObject;
-	private final ObjectMapper objectMapper;
-	private final OutputStream out;
+	private final SequenceWriter writer;
 
 	public ReflectionConfigAppenderAnnotationProcessing(ProcessingEnvironment processingEnv) throws IOException {
 		this.fileObject = processingEnv
 			.getFiler()
-			.createResource(StandardLocation.SOURCE_OUTPUT, "", "reflect.json")
+			.createResource(StandardLocation.CLASS_OUTPUT, "", "META-INF/" + "reflect.json")
 		;
-		this.objectMapper = new ObjectMapper()
-			.disable(SerializationFeature.CLOSE_CLOSEABLE)
-			.enable(SerializationFeature.INDENT_OUTPUT)
+
+		final DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(
+			"  ", DefaultIndenter.SYS_LF
+		);
+		final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
+		printer.indentObjectsWith(indenter);
+		printer.indentArraysWith(indenter);
+
+		this.writer = new ObjectMapper()
+			.writer(printer)
+			.writeValuesAsArray(fileObject.openOutputStream())
 		;
-		this.out = fileObject.openOutputStream();
 	}
 
 	@Override
 	public void append(ReflectionConfig reflectionConfig) {
 		try {
-			this.objectMapper.writeValue(this.out, reflectionConfig);
+			this.writer.write(reflectionConfig);
 		} catch (IOException e) {
-			throw new RuntimeException(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
 	public void close() throws IOException {
-		this.out.close();
+		this.writer.close();
 	}
 }

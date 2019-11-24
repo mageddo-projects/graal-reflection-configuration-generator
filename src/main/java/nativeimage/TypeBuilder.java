@@ -1,17 +1,16 @@
 package nativeimage;
 
-import jdk.jfr.Experimental;
-import lombok.experimental.UtilityClass;
-
 import javax.lang.model.element.Element;
 import javax.lang.model.type.MirroredTypeException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@UtilityClass
-@Experimental
-public class TypeBuilder {
+public final class TypeBuilder {
+
+	private TypeBuilder() {
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+	}
 
 	public static Set<String> of(Element element, RuntimeReflection runtimeReflectionAnn) {
 		if(!runtimeReflectionAnn.scanClassName().equals("")){
