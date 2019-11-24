@@ -1,9 +1,9 @@
 package nativeimage.core.utils;
 
-import com.mageddo.graal.reflection.configuration.RuntimeReflection;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.val;
+import nativeimage.RuntimeReflection;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
