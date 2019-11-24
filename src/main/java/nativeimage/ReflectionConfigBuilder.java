@@ -13,12 +13,13 @@ public class ReflectionConfigBuilder {
 	public static Set<ReflectionConfig> of(Element element){
 
 		final RuntimeReflection runtimeReflectionAnn = element.getAnnotation(RuntimeReflection.class);
+		System.out.println(">> success for annotation " + runtimeReflectionAnn);
 		final Set<ReflectionConfig> reflectionConfigs = new LinkedHashSet<>();
 
-		for (Class clazz : ClassBuilder.of(element, runtimeReflectionAnn)) {
+		for (String type : TypeBuilder.of(element, runtimeReflectionAnn)) {
 			reflectionConfigs.add(
 				toBuilder(runtimeReflectionAnn)
-				.clazz(clazz)
+				.type(type)
 				.build()
 			);
 		}

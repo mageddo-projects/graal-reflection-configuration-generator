@@ -6,7 +6,7 @@ import lombok.Value;
 @Value
 @Builder
 public class ReflectionConfig {
-	private Class clazz;
+	private String type;
 	private boolean allDeclaredConstructors;
 	private boolean allPublicConstructors;
 	private boolean allDeclaredMethods;

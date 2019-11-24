@@ -28,11 +28,11 @@ class ClassBuilderTest {
 		);
 
 		// act
-		final Set<Class> classes = ClassBuilder.of(null, ann);
+		final Set<String> classes = TypeBuilder.of(null, ann);
 
 		// assert
 		assertEquals(1, classes.size());
-		assertEquals(Pojo.class, classes.iterator().next());
+		assertEquals(Pojo.class.getName(), classes.iterator().next());
 	}
 
 	@Test
@@ -48,11 +48,11 @@ class ClassBuilderTest {
 		);
 
 		// act
-		final Set<Class> classes = ClassBuilder.of(null, ann);
+		final Set<String> classes = TypeBuilder.of(null, ann);
 
 		// assert
 		assertEquals(1, classes.size());
-		assertEquals(Pojo.class, classes.iterator().next());
+		assertEquals(Pojo.class.getName(), classes.iterator().next());
 	}
 
 	@Test
@@ -69,11 +69,11 @@ class ClassBuilderTest {
 		);
 
 		// act
-		final Set<Class> classes = ClassBuilder.of(null, ann);
+		final Set<String> classes = TypeBuilder.of(null, ann);
 
 		// assert
 		assertEquals(1, classes.size());
-		assertEquals(Pojo.class, classes.iterator().next());
+		assertEquals(Pojo.class.getName(), classes.iterator().next());
 	}
 
 	@Test
@@ -96,11 +96,11 @@ class ClassBuilderTest {
 
 
 		// act
-		final Set<Class> classes = ClassBuilder.of(element, ann);
+		final Set<String> classes = TypeBuilder.of(element, ann);
 
 		// assert
 		assertEquals(1, classes.size());
-		assertEquals(expectedClass, classes.iterator().next());
+		assertEquals(expectedClass.getName(), classes.iterator().next());
 	}
 
 }
