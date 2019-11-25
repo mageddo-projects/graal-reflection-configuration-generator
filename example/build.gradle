@@ -9,8 +9,8 @@ repositories {
 sourceCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-	compileOnly project(":")
-	annotationProcessor project(":")
+	compileOnly project(":graal-reflection-configuration")
+	annotationProcessor project(":graal-reflection-configuration")
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
 }
 
