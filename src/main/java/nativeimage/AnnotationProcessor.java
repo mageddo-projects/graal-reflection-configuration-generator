@@ -29,18 +29,37 @@ public class AnnotationProcessor extends AbstractProcessor {
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		final boolean processingOver = roundEnv.processingOver();
 		messager.printMessage(Diagnostic.Kind.NOTE, String.format(">> process: %s, annotations=%s %n", roundEnv, annotations));
-		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RuntimeReflection.class);
-		if (!annotations.isEmpty()) {
-			for (Element element : elements) {
-				messager.printMessage(Diagnostic.Kind.NOTE, String.format(":> %s%n", element));
-				classes.addAll(ReflectionConfigBuilder.of(element));
-			}
-		}
-
+		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(RuntimeReflection.class));
+		processElementsForRepeatableAnnotation(roundEnv);
 		if (processingOver) {
 			writeObjects();
 		}
 		return false;
+	}
+
+	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv) {
+		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RepeatbleRuntimeReflection.class);
+		for (Element element : elements) {
+			final RepeatbleRuntimeReflection annotation = element.getAnnotation(RepeatbleRuntimeReflection.class);
+			for (RuntimeReflection runtimeReflection : annotation.value()) {
+				addElement(element, runtimeReflection);
+			}
+		}
+	}
+
+	private void processElementsForAnnotation(
+		final boolean hasAnnotations, final Set<? extends Element> annotatedElements
+	) {
+		if (!hasAnnotations) {
+			for (Element element : annotatedElements) {
+				addElement(element, element.getAnnotation(RuntimeReflection.class));
+			}
+		}
+	}
+
+	private void addElement(Element element, RuntimeReflection annotation) {
+		messager.printMessage(Diagnostic.Kind.NOTE, String.format(":> %s%n", element));
+		classes.addAll(ReflectionConfigBuilder.of(element, annotation));
 	}
 
 	private void writeObjects() {

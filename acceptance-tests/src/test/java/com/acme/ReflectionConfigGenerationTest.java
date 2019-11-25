@@ -1,18 +1,21 @@
-import com.acme.TestUtils;
+package com.acme;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FruitTest {
+class ReflectionConfigGenerationTest {
 
 	@Test
-	void mustGenerateConfigFile(){
+	void mustConfigureReflectJson(){
 		// arrange
 
 		// act
 		final String reflectJson = TestUtils.getResourceAsString("/META-INF/reflect.json");
 
 		// assert
-		assertEquals(TestUtils.getResourceAsString("/fruit-test/001.json"), reflectJson);
+		assertEquals(TestUtils.getResourceAsString("/reflection-config-generation-test/001.json"), reflectJson);
+
+		// assert
 	}
 }

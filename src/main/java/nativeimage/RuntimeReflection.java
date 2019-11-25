@@ -10,6 +10,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PACKAGE})
+//@Repeatable(value = RuntimeReflections.class)
 public @interface RuntimeReflection {
 
 	/**

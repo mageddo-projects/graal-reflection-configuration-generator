@@ -12,15 +12,15 @@ import java.util.Set;
 @UtilityClass
 public class ReflectionConfigBuilder {
 
-	public static Set<ReflectionConfig> of(Element element){
+	public static Set<ReflectionConfig> of(Element element) {
+		return of(element, element.getAnnotation(RuntimeReflection.class));
+	}
 
-		final RuntimeReflection runtimeReflectionAnn = element.getAnnotation(RuntimeReflection.class);
-		System.out.println(">> success for annotation " + runtimeReflectionAnn);
+	public static Set<ReflectionConfig> of(Element element, final RuntimeReflection annotation){
 		final Set<ReflectionConfig> reflectionConfigs = new LinkedHashSet<>();
-
-		for (String type : TypeBuilder.of(element, runtimeReflectionAnn)) {
+		for (String type : TypeBuilder.of(element, annotation)) {
 			reflectionConfigs.add(
-				toBuilder(runtimeReflectionAnn)
+				toBuilder(annotation)
 				.type(type)
 				.build()
 			);

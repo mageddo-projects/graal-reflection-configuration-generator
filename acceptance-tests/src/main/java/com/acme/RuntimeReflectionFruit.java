@@ -2,7 +2,7 @@ package com.acme;
 
 import nativeimage.RuntimeReflection;
 
-@RuntimeReflection
+@RuntimeReflection(allDeclaredConstructors = true, allDeclaredFields = true)
 public class RuntimeReflectionFruit {
 
 	private String name;
