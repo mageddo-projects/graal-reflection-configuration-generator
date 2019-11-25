@@ -22,7 +22,7 @@ it will automatically configure reflection for `Fruit` props when compiling usin
 ```javascript
 [
   {
-    "name" : "com.acme.RuntimeReflectionFruit",
+    "name" : "com.acme.Fruit",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : false,
     "allDeclaredMethods" : false,
