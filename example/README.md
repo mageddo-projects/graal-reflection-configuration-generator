@@ -1,5 +1,7 @@
-Build and generate the reflect configuration json file
- 
-	./gradlew build reflectConfigFiles
-
-The file is located in ./build/reflect.json
+```bash
+$ ./build-native-image.sh
+...
+$ ./reflection-configuration-example 
+parsed = Fruit{name='Grape'}
+serialized = {"name":"Grape"}
+```
