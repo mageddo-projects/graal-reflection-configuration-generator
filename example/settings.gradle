@@ -1,0 +1,2 @@
+//include ':app', ':new_lib'
+//project(':new_lib').projectDir = new File('../new_lib/app')

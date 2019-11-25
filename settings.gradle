@@ -1,4 +1,3 @@
 rootProject.name = 'graal-reflection-configuration-generator'
 
 include ':acceptance-tests'
-include ':example'
