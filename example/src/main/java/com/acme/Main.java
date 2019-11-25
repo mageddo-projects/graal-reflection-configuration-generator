@@ -1,12 +1,18 @@
 package com.acme;
 
 import com.acme.vo.Fruit;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+
 public class Main {
-	public static void main(String[] args) throws JsonProcessingException {
-		final Fruit grape = new Fruit("Grape");
-		System.out.println(new ObjectMapper().writeValueAsString(grape));;
+
+	private static final ObjectMapper om = new ObjectMapper();
+	private static final String fruitJson = "{\"name\":\"Grape\"}";
+
+	public static void main(String[] args) throws IOException {
+		final Fruit fruit = om.readValue(fruitJson, Fruit.class);
+		System.out.printf("parsed = %s%n", fruit);
+		System.out.printf("serialized = %s%n", om.writeValueAsString(fruit));
 	}
 }
