@@ -2,7 +2,7 @@ package com.acme.vo;
 
 import nativeimage.RuntimeReflection;
 
-@RuntimeReflection
+@RuntimeReflection(allDeclaredFields = true, allDeclaredMethods = true)
 public class Fruit {
 
 	private String name;
