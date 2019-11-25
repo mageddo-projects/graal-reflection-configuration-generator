@@ -29,7 +29,6 @@ public class AnnotationProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		final boolean processingOver = roundEnv.processingOver();
-		messager.printMessage(Diagnostic.Kind.NOTE, String.format(">> process: %s, annotations=%s %n", roundEnv, annotations));
 		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(RuntimeReflection.class));
 		processElementsForRepeatableAnnotation(roundEnv);
 		if (processingOver) {
@@ -65,28 +64,25 @@ public class AnnotationProcessor extends AbstractProcessor {
 	}
 
 	private void addElement(Element element, RuntimeReflection annotation) {
-		messager.printMessage(Diagnostic.Kind.NOTE, String.format(":> %s%n", element));
 		classes.addAll(ReflectionConfigBuilder.of(element, annotation));
 	}
 
 	private void writeObjects() {
-		messager.printMessage(Diagnostic.Kind.NOTE, "writing objects: " + this.classes.size());
 		ReflectionConfigAppenderAnnotationProcessing appender = null;
 		try {
 			appender = new ReflectionConfigAppenderAnnotationProcessing(processingEnv);
 			for (ReflectionConfig config : this.classes) {
 				appender.append(config);
 			}
-			messager.printMessage(Diagnostic.Kind.NOTE, "completed");
 		} catch (Throwable e){
 			messager.printMessage(Diagnostic.Kind.ERROR, e.getMessage());
 		} finally {
 			if(appender != null){
 				try {
 					appender.close();
-					messager.printMessage(Diagnostic.Kind.NOTE, "closed");
 				} catch (IOException e) {}
 			}
+			messager.printMessage(Diagnostic.Kind.NOTE, "reflection-configuration, written-objects= " + this.classes.size());
 		}
 	}
 }
