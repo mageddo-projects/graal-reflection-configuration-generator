@@ -42,7 +42,13 @@ public class AnnotationProcessor extends AbstractProcessor {
 		for (Element element : elements) {
 			final RepeatbleRuntimeReflection annotation = element.getAnnotation(RepeatbleRuntimeReflection.class);
 			for (RuntimeReflection runtimeReflection : annotation.value()) {
-				addElement(element, runtimeReflection);
+				if(runtimeReflection.scanPackage().isEmpty()){
+					addElement(element, runtimeReflection);
+				} else {
+					for (Element nestedElements : roundEnv.getRootElements()) {
+						addElement(nestedElements, runtimeReflection);
+					}
+				}
 			}
 		}
 	}

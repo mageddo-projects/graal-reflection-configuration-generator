@@ -3,7 +3,6 @@ package nativeimage;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.MirroredTypeException;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 public final class TypeBuilder {
@@ -21,13 +20,7 @@ public final class TypeBuilder {
 			return toSet(scanClass);
 		}
 		if(!runtimeReflectionAnn.scanPackage().equals("")){
-			final Set<Class> discoveredClasses = new PackageClassesDiscover().discover(runtimeReflectionAnn.scanPackage());
-			final Set<String> discoveredClassNames = new LinkedHashSet<>(discoveredClasses.size());
-			for (Class clazz : discoveredClasses) {
-				discoveredClassNames.add(clazz.getName());
-			}
-			System.out.println(">>>>> discoveredClasses " + discoveredClasses);
-			return discoveredClassNames;
+			return new PackageClassesDiscover().discover(element, runtimeReflectionAnn.scanPackage());
 		}
 		return toSet(element.toString());
 	}

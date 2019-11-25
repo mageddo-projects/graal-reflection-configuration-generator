@@ -13,6 +13,10 @@ import nativeimage.RepeatbleRuntimeReflection;
 	@RuntimeReflection(
 		scanClassName = "com.acme.Car",
 		allDeclaredConstructors = true, allDeclaredFields = true, allDeclaredMethods = true
+	),
+	@RuntimeReflection(
+		scanPackage = "com.acme.subpackage",
+		allDeclaredFields = true
 	)
 })
 public class ReflectionConfig {

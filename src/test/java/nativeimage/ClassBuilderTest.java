@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import sun.reflect.annotation.AnnotationParser;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Name;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -59,6 +60,7 @@ class ClassBuilderTest {
 	void mustMapScanPackageClasses() {
 		// arrange
 
+		final Class expectedClass = Pojo.class;
 		final Map<String, Object> params = new LinkedHashMap<>();
 		params.put("scanClassName", "");
 		params.put("scanClass", Void.class);
@@ -68,8 +70,16 @@ class ClassBuilderTest {
 			RuntimeReflection.class, params
 		);
 
+		final Element element = Mockito.mock(Element.class);
+		doReturn(expectedClass.getName()).when(element).toString();
+
+		final Name name = Mockito.mock(Name.class);
+		doReturn(expectedClass.getSimpleName()).when(name).toString();
+		doReturn(expectedClass.getSimpleName().length()).when(name).length();
+		doReturn(name).when(element).getSimpleName();
+
 		// act
-		final Set<String> classes = TypeBuilder.of(null, ann);
+		final Set<String> classes = TypeBuilder.of(element, ann);
 
 		// assert
 		assertEquals(1, classes.size());
