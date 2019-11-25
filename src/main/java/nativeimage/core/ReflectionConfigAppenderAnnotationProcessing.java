@@ -10,6 +10,7 @@ import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.Writer;
 
 public class ReflectionConfigAppenderAnnotationProcessing implements ReflectionConfigAppender, Closeable {
 
@@ -20,21 +21,12 @@ public class ReflectionConfigAppenderAnnotationProcessing implements ReflectionC
 		this.fileObject = processingEnv
 			.getFiler()
 			.createResource(
-				StandardLocation.CLASS_OUTPUT, "", String.format("META-INF/%s/reflect.json", classPackage)
+				StandardLocation.CLASS_OUTPUT, "",
+				getFile(classPackage, "reflect.json")
 			)
 		;
-
-		final DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(
-			"  ", DefaultIndenter.SYS_LF
-		);
-		final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
-		printer.indentObjectsWith(indenter);
-		printer.indentArraysWith(indenter);
-
-		this.writer = new ObjectMapper()
-			.writer(printer)
-			.writeValuesAsArray(fileObject.openOutputStream())
-		;
+		this.writer = createReflectionConfigWriter();
+		this.createNativeImageProperties(processingEnv, classPackage);
 	}
 
 	@Override
@@ -50,4 +42,38 @@ public class ReflectionConfigAppenderAnnotationProcessing implements ReflectionC
 	public void close() throws IOException {
 		this.writer.close();
 	}
+
+	private SequenceWriter createReflectionConfigWriter() throws IOException {
+		final DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(
+			"  ", DefaultIndenter.SYS_LF
+		);
+		final DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
+		printer.indentObjectsWith(indenter);
+		printer.indentArraysWith(indenter);
+
+		return new ObjectMapper()
+			.writer(printer)
+			.writeValuesAsArray(fileObject.openOutputStream())
+			;
+	}
+
+	private void createNativeImageProperties(ProcessingEnvironment processingEnv, String classPackage) throws IOException {
+		final Writer nativeImagePropsWriter = processingEnv
+			.getFiler()
+			.createResource(
+				StandardLocation.CLASS_OUTPUT, "",
+				getFile(classPackage, "native-image.properties")
+			)
+			.openWriter();
+		try {
+			nativeImagePropsWriter.append("Args=-H:ReflectionConfigurationResources=${.}/reflect.json\n");
+		} finally {
+			IoUtils.safeClose(nativeImagePropsWriter);
+		}
+	}
+
+	private String getFile(String classPackage, final String fileName) {
+		return String.format("META-INF/native-image/%s/%s", classPackage, fileName);
+	}
+
 }

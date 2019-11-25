@@ -8,7 +8,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -79,11 +78,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 		} catch (Throwable e){
 			messager.printMessage(Diagnostic.Kind.ERROR, e.getMessage());
 		} finally {
-			if(appender != null){
-				try {
-					appender.close();
-				} catch (IOException e) {}
-			}
+			IoUtils.safeClose(appender);
 			messager.printMessage(Diagnostic.Kind.NOTE, "reflection-configuration, written-objects= " + this.classes.size());
 		}
 	}
