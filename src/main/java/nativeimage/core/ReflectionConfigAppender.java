@@ -1,4 +1,4 @@
-package nativeimage;
+package nativeimage.core;
 
 import nativeimage.core.ReflectionConfig;
 

@@ -1,10 +1,9 @@
-package nativeimage;
+package nativeimage.core;
 
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
-import nativeimage.core.ReflectionConfig;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.tools.FileObject;

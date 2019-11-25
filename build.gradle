@@ -1,7 +1,6 @@
 plugins {
 	id "com.gradle.plugin-publish" version "0.10.1"
 	id "maven"
-	id "org.jetbrains.gradle.plugin.idea-ext" version "0.4.2"
 }
 
 allprojects {
@@ -19,29 +18,7 @@ allprojects {
 		sourceCompatibility = JavaVersion.VERSION_1_7
 	}
 
-	dependencies {
-		compileOnly 'org.projectlombok:lombok:1.18.10'
-	}
-
 }
-
-//task fixIdeaPluginClasspath {
-//	doFirst {
-//		configure(tasks.pluginUnderTestMetadata) {
-//			def ideaClassesPath = project.buildDir.toPath().resolveSibling("out").resolve("production")
-//			def newClasspath = pluginClasspath as List
-//			newClasspath.add(0, ideaClassesPath)
-//			pluginClasspath.setFrom(newClasspath)
-//		}
-//	}
-//}
-//pluginUnderTestMetadata.mustRunAfter(fixIdeaPluginClasspath)
-//
-//idea.project.settings {
-//	taskTriggers {
-//		beforeBuild fixIdeaPluginClasspath, pluginUnderTestMetadata
-//	}
-//}
 
 archivesBaseName = project.name
 group = "com.mageddo"
@@ -50,7 +27,6 @@ version '2.0.2'
 dependencies {
 
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
-	compile ("org.reflections:reflections:0.9.11")
 
 	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
 	testCompile "org.junit.jupiter:junit-jupiter:5.4.2"

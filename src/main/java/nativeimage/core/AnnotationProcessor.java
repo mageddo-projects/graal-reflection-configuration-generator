@@ -1,6 +1,7 @@
-package nativeimage;
+package nativeimage.core;
 
-import nativeimage.core.ReflectionConfig;
+import nativeimage.RepeatableRuntimeReflection;
+import nativeimage.RuntimeReflection;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -38,9 +39,9 @@ public class AnnotationProcessor extends AbstractProcessor {
 	}
 
 	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv) {
-		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RepeatbleRuntimeReflection.class);
+		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RepeatableRuntimeReflection.class);
 		for (Element element : elements) {
-			final RepeatbleRuntimeReflection annotation = element.getAnnotation(RepeatbleRuntimeReflection.class);
+			final RepeatableRuntimeReflection annotation = element.getAnnotation(RepeatableRuntimeReflection.class);
 			for (RuntimeReflection runtimeReflection : annotation.value()) {
 				if(runtimeReflection.scanPackage().isEmpty()){
 					addElement(element, runtimeReflection);

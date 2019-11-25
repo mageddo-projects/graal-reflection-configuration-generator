@@ -1,5 +1,6 @@
 package nativeimage;
 
+import nativeimage.core.PackageClassesDiscover;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

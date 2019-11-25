@@ -1,9 +1,9 @@
 package com.acme;
 
 import nativeimage.RuntimeReflection;
-import nativeimage.RepeatbleRuntimeReflection;
+import nativeimage.RepeatableRuntimeReflection;
 
-@RepeatbleRuntimeReflection({
+@RepeatableRuntimeReflection({
 	@RuntimeReflection(
 		scanClass = Fruit.class,
 		allDeclaredFields = true, allPublicFields = true,

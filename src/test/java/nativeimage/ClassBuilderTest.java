@@ -1,5 +1,6 @@
 package nativeimage;
 
+import nativeimage.core.TypeBuilder;
 import nativeimage.vo.Pojo;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

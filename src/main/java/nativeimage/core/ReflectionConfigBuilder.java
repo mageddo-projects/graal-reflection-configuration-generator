@@ -1,19 +1,17 @@
-package nativeimage;
+package nativeimage.core;
 
 import jdk.jfr.Experimental;
-import lombok.experimental.UtilityClass;
-import nativeimage.core.ReflectionConfig;
+import nativeimage.RuntimeReflection;
 
 import javax.lang.model.element.Element;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Experimental
-@UtilityClass
-public class ReflectionConfigBuilder {
+public final class ReflectionConfigBuilder {
 
-	public static Set<ReflectionConfig> of(Element element) {
-		return of(element, element.getAnnotation(RuntimeReflection.class));
+	private ReflectionConfigBuilder() {
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
 	}
 
 	public static Set<ReflectionConfig> of(Element element, final RuntimeReflection annotation){

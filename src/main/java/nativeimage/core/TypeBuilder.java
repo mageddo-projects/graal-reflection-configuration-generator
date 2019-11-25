@@ -1,4 +1,6 @@
-package nativeimage;
+package nativeimage.core;
+
+import nativeimage.RuntimeReflection;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.MirroredTypeException;
