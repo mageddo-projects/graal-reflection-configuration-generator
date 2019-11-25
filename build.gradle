@@ -3,6 +3,10 @@ plugins {
 	id "maven"
 }
 
+if(JavaVersion.current() != JavaVersion.VERSION_1_8){
+	throw new UnsupportedOperationException("Please use JDK 8 to compile this project, current: ${JavaVersion.current()}")
+}
+
 allprojects {
 
 	apply plugin: "java"
