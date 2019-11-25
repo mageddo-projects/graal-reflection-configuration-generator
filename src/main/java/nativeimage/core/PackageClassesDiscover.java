@@ -7,11 +7,11 @@ import java.util.Set;
 public class PackageClassesDiscover {
 	public Set<String> discover(Element element, String packageName) {
 		final String className = element.toString();
-		final int endIndex = className.length() - element.getSimpleName().length() - 1;
-		final String discoveredPackage = className.substring(0, endIndex);
+		final String discoveredPackage = ClassUtils.getClassPackage(className);
 		if(discoveredPackage.equals(packageName)){
 			return Collections.singleton(className);
 		}
 		return Collections.emptySet();
 	}
+
 }

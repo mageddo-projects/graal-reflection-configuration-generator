@@ -18,6 +18,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
 	private Set<ReflectionConfig> classes;
 	private Messager messager;
+	private String classPackage;
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -64,13 +65,14 @@ public class AnnotationProcessor extends AbstractProcessor {
 	}
 
 	private void addElement(Element element, RuntimeReflection annotation) {
-		classes.addAll(ReflectionConfigBuilder.of(element, annotation));
+		this.classPackage = this.classPackage == null ? ClassUtils.getClassPackage(element.toString()) : this.classPackage;
+		this.classes.addAll(ReflectionConfigBuilder.of(element, annotation));
 	}
 
 	private void writeObjects() {
 		ReflectionConfigAppenderAnnotationProcessing appender = null;
 		try {
-			appender = new ReflectionConfigAppenderAnnotationProcessing(processingEnv);
+			appender = new ReflectionConfigAppenderAnnotationProcessing(this.processingEnv, getClassPackage());
 			for (ReflectionConfig config : this.classes) {
 				appender.append(config);
 			}
@@ -85,4 +87,9 @@ public class AnnotationProcessor extends AbstractProcessor {
 			messager.printMessage(Diagnostic.Kind.NOTE, "reflection-configuration, written-objects= " + this.classes.size());
 		}
 	}
+
+	private String getClassPackage() {
+		return this.classPackage == null ? "graal-reflection-configuration" : this.classPackage;
+	}
+
 }

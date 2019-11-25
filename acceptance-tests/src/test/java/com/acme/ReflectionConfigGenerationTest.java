@@ -11,7 +11,7 @@ class ReflectionConfigGenerationTest {
 		// arrange
 
 		// act
-		final String reflectJson = TestUtils.getResourceAsString("/META-INF/reflect.json");
+		final String reflectJson = TestUtils.getResourceAsString("/META-INF/com.acme/reflect.json");
 
 		// assert
 		assertEquals(TestUtils.getResourceAsString("/reflection-config-generation-test/001.json"), reflectJson);

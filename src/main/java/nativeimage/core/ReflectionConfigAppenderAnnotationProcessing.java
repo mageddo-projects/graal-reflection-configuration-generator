@@ -16,10 +16,12 @@ public class ReflectionConfigAppenderAnnotationProcessing implements ReflectionC
 	private final FileObject fileObject;
 	private final SequenceWriter writer;
 
-	public ReflectionConfigAppenderAnnotationProcessing(ProcessingEnvironment processingEnv) throws IOException {
+	public ReflectionConfigAppenderAnnotationProcessing(ProcessingEnvironment processingEnv, String classPackage) throws IOException {
 		this.fileObject = processingEnv
 			.getFiler()
-			.createResource(StandardLocation.CLASS_OUTPUT, "", "META-INF/" + "reflect.json")
+			.createResource(
+				StandardLocation.CLASS_OUTPUT, "", String.format("META-INF/%s/reflect.json", classPackage)
+			)
 		;
 
 		final DefaultPrettyPrinter.Indenter indenter = new DefaultIndenter(
