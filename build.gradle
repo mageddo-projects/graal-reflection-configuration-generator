@@ -1,9 +1,10 @@
 plugins {
 	id "com.gradle.plugin-publish" version "0.10.1"
-	id "groovy"
 	id "maven"
-	id "org.jetbrains.gradle.plugin.idea-ext" version "0.4.2"
-	id 'java-gradle-plugin'
+}
+
+if(JavaVersion.current() != JavaVersion.VERSION_1_8){
+	throw new UnsupportedOperationException("Please use JDK 8 to compile this project, current: ${JavaVersion.current()}")
 }
 
 allprojects {
@@ -15,36 +16,12 @@ allprojects {
 		mavenCentral()
 	}
 
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_1_7
 
 	compileTestJava {
-		sourceCompatibility = JavaVersion.VERSION_11
-		targetCompatibility = JavaVersion.VERSION_11
+		sourceCompatibility = JavaVersion.VERSION_1_7
 	}
 
-	dependencies {
-		testCompile group: 'junit', name: 'junit', version: '4.12'
-	}
-
-}
-
-task fixIdeaPluginClasspath {
-	doFirst {
-		configure(tasks.pluginUnderTestMetadata) {
-			def ideaClassesPath = project.buildDir.toPath().resolveSibling("out").resolve("production")
-			def newClasspath = pluginClasspath as List
-			newClasspath.add(0, ideaClassesPath)
-			pluginClasspath.setFrom(newClasspath)
-		}
-	}
-}
-pluginUnderTestMetadata.mustRunAfter(fixIdeaPluginClasspath)
-
-idea.project.settings {
-	taskTriggers {
-		beforeBuild fixIdeaPluginClasspath, pluginUnderTestMetadata
-	}
 }
 
 archivesBaseName = project.name
@@ -52,26 +29,15 @@ group = "com.mageddo"
 version '2.0.2'
 
 dependencies {
+
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
-	compile ("com.mageddo:graal-reflection-configuration:2.0.0")
-	compile ("org.reflections:reflections:0.9.11")
-	compile gradleApi()
-	compile localGroovy()
-	testCompile gradleTestKit()
+
 	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
+	testCompile "org.junit.jupiter:junit-jupiter:5.4.2"
+	testCompile "org.mockito:mockito-junit-jupiter:3.1.0"
+
 }
 
-pluginBundle {
-
-	website = "https://github.com/mageddo/graal-reflection-configuration-generator.git"
-	vcsUrl = "https://github.com/mageddo/graal-reflection-configuration-generator.git"
-	description = "Resolve your maven dependencies from a standalone embed maven local repository folder(on the project directory for example)"
-	tags = ["java", "graal"]
-
-	plugins {
-		greetingsPlugin {
-			id = "${group}.${project.name}"
-			displayName = 'Generate Graal Relection Configuration file for all annotated classes'
-		}
-	}
+test {
+	useJUnitPlatform()
 }

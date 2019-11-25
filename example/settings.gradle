@@ -1,0 +1,2 @@
+include ':graal-reflection-configuration'
+project(':graal-reflection-configuration').projectDir = new File('../')
