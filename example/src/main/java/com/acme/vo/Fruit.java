@@ -31,6 +31,9 @@ public class Fruit {
 
 		private String subClassProp;
 
+		public SubClass() {
+		}
+
 		public SubClass(String subClassProp) {
 			this.subClassProp = subClassProp;
 		}
