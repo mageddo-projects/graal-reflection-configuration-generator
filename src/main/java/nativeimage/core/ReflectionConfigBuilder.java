@@ -44,6 +44,8 @@ public final class ReflectionConfigBuilder {
 		if(reflectionAnn.constructors()){
 			final List<Method> methods = new ArrayList<>();
 			methods.add(Method.of("<init>"));
+			builder.allDeclaredConstructors(true);
+			builder.allPublicConstructors(true);
 			builder.methods(methods);
 		}
 		return builder;
