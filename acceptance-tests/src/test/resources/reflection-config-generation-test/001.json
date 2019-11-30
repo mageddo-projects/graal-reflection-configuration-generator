@@ -63,6 +63,21 @@
     "allDeclaredFields" : true
   },
   {
+    "name" : "com.acme.firstlevel.secondlevel.Stuff2",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : false,
+    "allPublicMethods" : false,
+    "allPublicFields" : false,
+    "allDeclaredFields" : false,
+    "methods" : [
+      {
+        "name" : "<init>",
+        "parameterTypes" : [ ]
+      }
+    ]
+  },
+  {
     "name" : "com.acme.RuntimeReflectionFruit",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : false,

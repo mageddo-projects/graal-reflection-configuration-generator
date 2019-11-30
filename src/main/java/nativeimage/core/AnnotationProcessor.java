@@ -86,7 +86,10 @@ public class AnnotationProcessor extends AbstractProcessor {
 			element.getEnclosingElement(), element.getClass()
 		);
 		this.classPackage = this.classPackage == null ? ClassUtils.getClassPackage(element.toString()) : this.classPackage;
-		this.classes.addAll(ReflectionConfigBuilder.of(element, annotation));
+		for (ReflectionConfig config : ReflectionConfigBuilder.of(element, annotation)) {
+			this.classes.remove(config);
+			this.classes.add(config);
+		}
 	}
 
 	private void writeObjects() {

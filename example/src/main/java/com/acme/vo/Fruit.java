@@ -4,13 +4,6 @@ public class Fruit {
 
 	private String name;
 
-	public Fruit() {
-	}
-
-	public Fruit(String name) {
-		this.name = name;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -31,11 +24,9 @@ public class Fruit {
 
 		private String subClassProp;
 
-		public SubClass() {
-		}
-
-		public SubClass(String subClassProp) {
+		public SubClass setSubClassProp(String subClassProp) {
 			this.subClassProp = subClassProp;
+			return this;
 		}
 
 		public String getSubClassProp() {
