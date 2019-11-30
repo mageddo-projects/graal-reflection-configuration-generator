@@ -1,8 +1,8 @@
 plugins {
 	id "maven"
 	id "maven-publish"
-	id "io.codearte.nexus-staging" version "0.20.0"
-	id "de.marcphilipp.nexus-publish" version "0.2.0"
+	id "io.codearte.nexus-staging" version "0.21.1"
+	id "de.marcphilipp.nexus-publish" version "0.4.0"
 }
 
 if(JavaVersion.current() != JavaVersion.VERSION_1_8){
@@ -58,6 +58,12 @@ artifacts {
 	archives javadocJar, sourcesJar
 }
 
+nexusStaging {
+	packageGroup = 'com.mageddo'
+	username = project.findProperty("ossrhUsername")
+	password = project.findProperty("ossrhPassword")
+}
+
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
@@ -92,6 +98,11 @@ publishing {
 				}
 			}
 		}
+	}
+}
+nexusPublishing {
+	repositories {
+		sonatype()
 	}
 }
 

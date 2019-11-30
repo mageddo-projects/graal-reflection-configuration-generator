@@ -25,11 +25,11 @@ case $1 in
 
 		# building and deploying to sonatype nexys
 		export GRADLE_PROJECT_OPTS="-PossrhUsername=${NEXUS_USERNAME} -PossrhPassword=${NEXUS_PASSWORD}"
-		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -Psigning.password=${NEXUS_PASSWORD} -Psigning.keyId=${GPG_KEY_ID}"
+		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -Psigning.password=${GPG_PASSWORD} -Psigning.keyId=${GPG_KEY_ID}"
 		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -Psigning.secretKeyRingFile=$HOME/.gnupg/secring.gpg"
 		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -PrepositoryUrl=$REPOSITORY_URL"
 
-		./gradlew build publishToNexus closeAndReleaseRepository ${GRADLE_PROJECT_OPTS}
+		./gradlew build publishToSonatype closeAndReleaseRepository ${GRADLE_PROJECT_OPTS}
 
 		# publishing tag
 		REMOTE="https://${REPO_TOKEN}@$(echo $REPOSITORY_URL | awk -F '//' '{print $2}')"
