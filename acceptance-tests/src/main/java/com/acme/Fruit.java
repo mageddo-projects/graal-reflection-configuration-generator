@@ -30,4 +30,8 @@ public class Fruit {
 		this.color = color;
 		return this;
 	}
+
+	public static class ShouldNotScan {
+
+	}
 }
