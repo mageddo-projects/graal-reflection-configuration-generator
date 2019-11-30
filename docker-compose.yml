@@ -14,6 +14,8 @@ services:
       - NEXUS_PASSWORD=$NEXUS_PASSWORD
       - GPG_CIPHER_KEY=$GPG_CIPHER_KEY
       - GPG_KEY_ID=$GPG_KEY_ID
+      - REPOSITORY_URL=$REPOSITORY_URL
+      - GPG_PASSWORD=$GPG_PASSWORD
 
   travis-pull-request-build:
     image: adoptopenjdk:8u232-b09-jdk-hotspot
