@@ -3,7 +3,7 @@
 set -e
 
 validateRelease(){
-	APP_VERSION=$(./gradlew -q version)
+	APP_VERSION=$1
 	if git rev-parse "$APP_VERSION^{}" >/dev/null 2>&1; then
 		echo "> Version already exists $APP_VERSION"
 		exit 0
@@ -14,25 +14,25 @@ case $1 in
 
 	deploy )
 
-		echo '> deploying'
+		APP_VERSION=$(./gradlew -q version)
+		echo "> deploying ${APP_VERSION}"
 
-		validateRelease
+		validateRelease $APP_VERSION
 
 		# preparing gpg key
 		mkdir -p $HOME/.gnupg/
-		openssl aes-256-cbc -d -k ${ENCRYPTION_KEY} -in files/deployment/.gnupg/secring.gpg -out $HOME/.gnupg/secring.gpg
+		openssl aes-256-cbc -d -pbkdf2 -k ${GPG_CIPHER_KEY} -in files/deployment/.gnupg/secring.gpg.encrypted -out $HOME/.gnupg/secring.gpg
 
 		# building and deploying to sonatype nexys
-		export GRADLE_PROJECT_OPTS="-PossrhUsername=mageddo -PossrhPassword=${SIGNING_PASSWORD}"
-		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -Psigning.password=${SIGNING_PASSWORD} -Psigning.keyId=${SIGNING_KEY_ID}"
+		export GRADLE_PROJECT_OPTS="-PossrhUsername=${NEXUS_USERNAME} -PossrhPassword=${NEXUS_PASSWORD}"
+		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -Psigning.password=${NEXUS_PASSWORD} -Psigning.keyId=${GPG_KEY_ID}"
 		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -Psigning.secretKeyRingFile=$HOME/.gnupg/secring.gpg"
+		export GRADLE_PROJECT_OPTS="${GRADLE_PROJECT_OPTS} -PrepositoryUrl=$REPOSITORY_URL"
 
 		./gradlew build publishToNexus closeAndReleaseRepository ${GRADLE_PROJECT_OPTS}
 
 		# publishing tag
-		GITHUB_REPO_URL=$(cat gradle.properties | grep 'githubRepoUrl' | awk -F = '{ print $2}')
-		REMOTE="https://${REPO_TOKEN}@github.com/mageddo/graal-reflection-configuration-generator.git"
-		APP_VERSION=$(./gradlew -q version)
+		REMOTE="https://${REPO_TOKEN}@$(echo $REPOSITORY_URL | awk -F '//' '{print $2}')"
 		git tag ${APP_VERSION}
 		git push "$REMOTE" --tags
 		git status

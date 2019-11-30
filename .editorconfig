@@ -19,3 +19,6 @@ trim_trailing_whitespace = none
 indent_style = none
 indent_size = none
 
+[{*.yaml, *.yml}]
+indent_style = space
+indent_size = 2
