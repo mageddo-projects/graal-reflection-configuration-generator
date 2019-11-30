@@ -1,0 +1,8 @@
+sudo: required
+language: c
+services:
+  - docker
+
+script:
+  - 'if [ "$TRAVIS_BRANCH" = "master" ]; then docker-compose down && docker-compose up --abort-on-container-exit travis-build; fi'
+  - 'if [ "$TRAVIS_BRANCH" != "master" ]; then docker-compose down && docker-compose up --abort-on-container-exit travis-pull-request-build; fi'
