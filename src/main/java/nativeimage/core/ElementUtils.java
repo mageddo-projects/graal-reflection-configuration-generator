@@ -4,22 +4,34 @@ import org.apache.commons.lang3.Validate;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ElementUtils {
+
+	private static final Set<ElementKind> TYPE_ELEMENTS = new HashSet<>(Arrays.asList(
+		ElementKind.CLASS, ElementKind.INTERFACE, ElementKind.ENUM
+	));
+
 	private ElementUtils() {
 	}
 
 	public static String toClassName(Element element) {
 		Validate.isTrue(
-			element.getKind() == ElementKind.CLASS,
+			isTypeElement(element),
 			"element type must be class but is %s", element.getKind()
 		);
 		if(element.getEnclosingElement() == null){
 			return element.toString();
 		}
-		if(element.getEnclosingElement().getKind() == ElementKind.CLASS){
+		if(isTypeElement(element.getEnclosingElement())){
 			return String.format("%s\u0024%s", element.getEnclosingElement().toString(), element.getSimpleName());
 		}
 		return element.toString();
+	}
+
+	private static boolean isTypeElement(Element e){
+		return TYPE_ELEMENTS.contains(e.getKind());
 	}
 }
