@@ -7,9 +7,19 @@ See [an example app](https://github.com/mageddo/graal-reflection-configuration-g
 
 #### Using
 
+Gradle dependencies 
+```groovy
+dependencies {
+  compileOnly("com.mageddo.nativeimage:reflection-config-generator:2.0.3")
+  annotationProcessor("com.mageddo.nativeimage:reflection-config-generator:2.0.3")
+}
+```
+
 Consider the following example 
 ```java
 package com.acme;
+
+import nativeimage.Reflection;
 
 @Reflection(declaredConstructors = true, declaredFields = true)
 public class Fruit {
