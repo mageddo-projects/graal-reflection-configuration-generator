@@ -102,3 +102,7 @@ if (project.hasProperty("signing.keyId")) {
 		sign publishing.publications.mavenJava
 	}
 }
+
+task version(){
+	println(project.version)
+}
