@@ -10,4 +10,4 @@ echo "> generating native image"
 native-image -J-Xmx5G --no-server -cp ./build/libs/example-all.jar
 
 echo "> running"
-./reflection-configura
+./reflection-configuration-example
