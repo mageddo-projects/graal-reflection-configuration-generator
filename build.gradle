@@ -1,6 +1,8 @@
 plugins {
-	id "com.gradle.plugin-publish" version "0.10.1"
 	id "maven"
+	id "maven-publish"
+	id "io.codearte.nexus-staging" version "0.20.0"
+	id "de.marcphilipp.nexus-publish" version "0.2.0"
 }
 
 if(JavaVersion.current() != JavaVersion.VERSION_1_8){
@@ -24,10 +26,6 @@ allprojects {
 
 }
 
-archivesBaseName = project.name
-group = "com.mageddo"
-version '2.0.2'
-
 dependencies {
 
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
@@ -40,4 +38,67 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allJava
+	archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+	from javadoc
+	archiveClassifier = 'javadoc'
+}
+
+artifacts {
+	archives javadocJar, sourcesJar
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from(components.java)
+			artifact sourcesJar
+			artifact javadocJar
+			pom {
+				name = project.name
+				packaging = 'jar'
+				description = project.description
+				url = "${githubRepoUrl}/tree/master/" + project.name
+
+				scm {
+					connection = "${githubRepoUrl}.git"
+					developerConnection = "${githubRepoUrl}.git"
+					url = "${githubRepoUrl}/tree/master/" + project.name
+				}
+
+				licenses {
+					license {
+						name = 'The Apache License, Version 2.0'
+						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+
+				developers {
+					developer {
+						id = 'mageddo'
+						name = 'Elvis Souza'
+						email = 'edigitalb@gmail.com'
+					}
+				}
+
+			}
+		}
+	}
+}
+
+if (project.hasProperty("signing.keyId")) {
+	apply plugin: 'signing'
+	signing {
+		sign publishing.publications.mavenJava
+	}
 }
