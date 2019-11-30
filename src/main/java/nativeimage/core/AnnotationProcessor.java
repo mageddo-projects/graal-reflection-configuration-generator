@@ -1,5 +1,6 @@
 package nativeimage.core;
 
+import com.sun.tools.javac.code.Symbol;
 import nativeimage.Reflection;
 import nativeimage.Reflections;
 import nativeimage.core.domain.ReflectionConfig;
@@ -69,13 +70,21 @@ public class AnnotationProcessor extends AbstractProcessor {
 				this.addElement(nestedElement, reflection);
 				for (final Element innerClass : ElementFinder.find(nestedElement, ElementKind.CLASS)) {
 					this.addElement(innerClass, reflection);
-					log(Diagnostic.Kind.OTHER, String.format("innerClass=%s", innerClass));
+					log(Diagnostic.Kind.OTHER, "innerClass=%s", innerClass);
 				}
 			}
 		}
 	}
 
 	private void addElement(Element element, Reflection annotation) {
+//		final Symbol.ClassSymbol symbol = (Symbol.ClassSymbol) element;
+//		((Symbol.ClassSymbol) element).sourcefile.de
+		log(
+			Diagnostic.Kind.OTHER,
+			"m=addElement, asType=%s, kind=%s, simpleName=%s, enclosing=%s, clazz=%s",
+			element.asType(), element.getKind(), element.getSimpleName(),
+			element.getEnclosingElement(), element.getClass()
+		);
 		this.classPackage = this.classPackage == null ? ClassUtils.getClassPackage(element.toString()) : this.classPackage;
 		this.classes.addAll(ReflectionConfigBuilder.of(element, annotation));
 	}

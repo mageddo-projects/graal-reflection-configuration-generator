@@ -36,7 +36,7 @@
     "allDeclaredFields" : true
   },
   {
-    "name" : "com.acme.subpackage.UpperCass.InnerClass",
+    "name" : "com.acme.subpackage.UpperCass$InnerClass",
     "allDeclaredConstructors" : false,
     "allPublicConstructors" : false,
     "allDeclaredMethods" : false,
