@@ -34,7 +34,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		final boolean processingOver = roundEnv.processingOver();
 		processElementsForRepeatableAnnotation(roundEnv);
-		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(Reflection.class));
+		processElementsForAnnotation(roundEnv);
 		if (processingOver) {
 			writeObjects();
 		}
@@ -49,28 +49,28 @@ public class AnnotationProcessor extends AbstractProcessor {
 	}
 
 	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv, Element element) {
-		final Reflections annotation = element.getAnnotation(Reflections.class);
-		for (final Reflection reflection : annotation.value()) {
-			if(reflection.scanPackage().isEmpty()){
-				this.addElement(element, reflection);
-			} else {
-				for (final Element nestedElement : roundEnv.getRootElements()) {
-					this.addElement(nestedElement, reflection);
-					for (final Element innerClass : ElementFinder.find(nestedElement, ElementKind.CLASS)) {
-						this.addElement(innerClass, reflection);
-						log(Diagnostic.Kind.OTHER, String.format("innerClass=%s", innerClass));
-					}
-				}
-			}
+		final Reflections reflections = element.getAnnotation(Reflections.class);
+		for (final Reflection reflection : reflections.value()) {
+			processElementsForAnnotation(roundEnv, element, reflection);
 		}
 	}
 
-	private void processElementsForAnnotation(
-		final boolean hasAnnotations, final Set<? extends Element> annotatedElements
-	) {
-		if (!hasAnnotations) {
-			for (Element element : annotatedElements) {
-				addElement(element, element.getAnnotation(Reflection.class));
+	private void processElementsForAnnotation(RoundEnvironment roundEnv) {
+		for (Element element : roundEnv.getElementsAnnotatedWith(Reflection.class)) {
+			processElementsForAnnotation(roundEnv, element, element.getAnnotation(Reflection.class));
+		}
+	}
+
+	private void processElementsForAnnotation(RoundEnvironment roundEnv, Element element, Reflection reflection) {
+		if(reflection.scanPackage().isEmpty()){
+			this.addElement(element, reflection);
+		} else {
+			for (final Element nestedElement : roundEnv.getRootElements()) {
+				this.addElement(nestedElement, reflection);
+				for (final Element innerClass : ElementFinder.find(nestedElement, ElementKind.CLASS)) {
+					this.addElement(innerClass, reflection);
+					log(Diagnostic.Kind.OTHER, String.format("innerClass=%s", innerClass));
+				}
 			}
 		}
 	}

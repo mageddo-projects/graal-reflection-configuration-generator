@@ -1,9 +1,5 @@
 package com.acme.vo;
 
-
-import nativeimage.Reflection;
-
-@Reflection(declaredFields = true, declaredMethods = true, declaredConstructors = true)
 public class Fruit {
 
 	private String name;
