@@ -11,7 +11,7 @@ Consider the following example
 ```java
 package com.acme;
 
-@RuntimeReflection(allDeclaredConstructors = true, allDeclaredFields = true)
+@Reflection(declaredConstructors = true, declaredFields = true)
 public class Fruit {
   private String name;
   private String color;   

@@ -6,17 +6,17 @@ import nativeimage.Reflections;
 @Reflections({
 	@Reflection(
 		scanClass = Fruit.class,
-		allDeclaredFields = true, allPublicFields = true,
-		allDeclaredMethods = true, allPublicMethods = true,
-		allDeclaredConstructors = true, allPublicConstructors = true
+		declaredFields = true, publicFields = true,
+		declaredMethods = true, publicMethods = true,
+		declaredConstructors = true, publicConstructors = true
 	),
 	@Reflection(
 		scanClassName = "com.acme.Car",
-		allDeclaredConstructors = true, allDeclaredFields = true, allDeclaredMethods = true
+		declaredConstructors = true, declaredFields = true, declaredMethods = true
 	),
 	@Reflection(
 		scanPackage = "com.acme.subpackage",
-		allDeclaredFields = true
+		declaredFields = true
 	)
 })
 public class ReflectionConfig {
