@@ -1,0 +1,18 @@
+version: '3'
+services:
+  travis-build:
+    image: adoptopenjdk:8u232-b09-jdk-hotspot
+    command: ./builder.sh deploy
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - $HOME:/root
+    env_file: .env
+
+  travis-pull-request-build:
+    image: adoptopenjdk:8u232-b09-jdk-hotspot
+    command: ./gradlew build
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - $HOME:/root
