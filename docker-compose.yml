@@ -1,7 +1,7 @@
 version: '3'
 services:
   travis-build:
-    image: openjdk:11-jdk
+    image: adoptopenjdk:8u232-b09-jdk-hotspot
     command: ./builder.sh deploy
     working_dir: /app
     volumes:
@@ -15,7 +15,7 @@ services:
       - SIGNING_PASSWORD=$SIGNING_PASSWORD
 
   travis-pull-request-build:
-    image: openjdk:11-jdk
+    image: adoptopenjdk:8u232-b09-jdk-hotspot
     command: ./gradlew build
     working_dir: /app
     volumes:
