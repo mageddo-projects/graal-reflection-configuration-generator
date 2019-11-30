@@ -9,8 +9,8 @@ repositories {
 sourceCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-	compileOnly project(":graal-reflection-configuration")
-	annotationProcessor project(":graal-reflection-configuration")
+	compileOnly("com.mageddo.nativeimage:reflection-config-generator:2.0.3")
+	annotationProcessor("com.mageddo.nativeimage:reflection-config-generator:2.0.3")
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
 }
 
