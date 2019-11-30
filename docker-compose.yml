@@ -1,7 +1,9 @@
 version: '3'
 services:
   travis-build:
-    image: adoptopenjdk:8u232-b09-jdk-hotspot
+    build:
+      context: .
+      dockerfile: Dockerfile.build
     command: ./builder.sh deploy
     working_dir: /app
     volumes:
@@ -10,7 +12,9 @@ services:
     env_file: .env
 
   travis-pull-request-build:
-    image: adoptopenjdk:8u232-b09-jdk-hotspot
+    build:
+      context: .
+      dockerfile: Dockerfile.build
     command: ./gradlew build
     working_dir: /app
     volumes:
