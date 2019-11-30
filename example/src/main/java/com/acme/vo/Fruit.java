@@ -30,4 +30,17 @@ public class Fruit {
 			"name='" + name + '\'' +
 			'}';
 	}
+
+	public static class SubClass {
+
+		private String subClassProp;
+
+		public SubClass(String subClassProp) {
+			this.subClassProp = subClassProp;
+		}
+
+		public String getSubClassProp() {
+			return subClassProp;
+		}
+	}
 }

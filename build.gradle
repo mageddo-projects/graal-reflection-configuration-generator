@@ -72,7 +72,6 @@ publishing {
 			artifact javadocJar
 			pom {
 				name = project.name
-				artifactId = 'reflection-config-generator'
 				packaging = 'jar'
 				description = project.description
 				url = "${repositoryUrl}"

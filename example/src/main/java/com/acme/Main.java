@@ -12,7 +12,10 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		final Fruit fruit = om.readValue(fruitJson, Fruit.class);
-		System.out.printf("parsed = %s%n", fruit);
-		System.out.printf("serialized = %s%n", om.writeValueAsString(fruit));
+		System.out.println("> outer class");
+		System.out.printf("\tparsed = %s%n", fruit);
+		System.out.printf("\tserialized = %s%n", om.writeValueAsString(fruit));
+		System.out.println("> inner class");
+		System.out.printf("\tserialized = %s%n", om.writeValueAsString(new Fruit.SubClass("Stuff")));
 	}
 }

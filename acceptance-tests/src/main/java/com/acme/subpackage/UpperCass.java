@@ -1,6 +1,6 @@
 package com.acme.subpackage;
 
 public class UpperCass {
-	public static class InnerClass {
+	private static class InnerClass {
 	}
 }

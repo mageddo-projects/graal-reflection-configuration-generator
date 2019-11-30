@@ -17,7 +17,7 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class AnnotationProcessor extends AbstractProcessor {
 
-	private static final Diagnostic.Kind LEVEL = Diagnostic.Kind.OTHER;
+	private static final Diagnostic.Kind LEVEL = Diagnostic.Kind.NOTE;
 
 	private Set<ReflectionConfig> classes;
 	private Messager messager;
