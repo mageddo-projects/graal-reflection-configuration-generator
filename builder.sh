@@ -3,7 +3,7 @@
 set -e
 
 validateRelease(){
-	APP_VERSION=$(./gradlew -q version)
+	APP_VERSION=$1
 	if git rev-parse "$APP_VERSION^{}" >/dev/null 2>&1; then
 		echo "> Version already exists $APP_VERSION"
 		exit 0
@@ -14,9 +14,10 @@ case $1 in
 
 	deploy )
 
-		echo '> deploying'
+		APP_VERSION=$(./gradlew -q version)
+		echo "> deploying ${APP_VERSION}"
 
-		validateRelease
+		validateRelease $APP_VERSION
 
 		# preparing gpg key
 		mkdir -p $HOME/.gnupg/
@@ -31,9 +32,7 @@ case $1 in
 		./gradlew build publishToNexus closeAndReleaseRepository ${GRADLE_PROJECT_OPTS}
 
 		# publishing tag
-		GITHUB_REPO_URL=$(cat gradle.properties | grep 'repositoryUrl' | awk -F = '{ print $2}')
-		REMOTE="https://${REPO_TOKEN}@$(echo $GITHUB_REPO_URL | awk -F '//' '{print $2}')"
-		APP_VERSION=$(./gradlew -q version)
+		REMOTE="https://${REPO_TOKEN}@$(echo $REPOSITORY_URL | awk -F '//' '{print $2}')"
 		git tag ${APP_VERSION}
 		git push "$REMOTE" --tags
 		git status
