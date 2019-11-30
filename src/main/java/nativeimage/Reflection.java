@@ -28,16 +28,39 @@ public @interface Reflection {
 	 */
 	String scanClassName() default "";
 
+	/**
+	 * {@link #declaredConstructors()}, {@link #publicConstructors()} and &lt;init&gt; together
+	 */
+	boolean constructors() default false;
+
+	/**
+	 * aka allDeclaredConstructors
+	 */
 	boolean declaredConstructors() default false;
 
+	/**
+	 * aka allPublicConstructors
+	 */
 	boolean publicConstructors() default false;
 
+	/**
+	 * aka allDeclaredMethods
+	 */
 	boolean declaredMethods() default false;
 
+	/**
+	 * aka allPublicMethods
+	 */
 	boolean publicMethods() default false;
 
+	/**
+	 * aka allPublicFields
+	 */
 	boolean publicFields() default false;
 
+	/**
+	 * aka allDeclaredFields
+	 */
 	boolean declaredFields() default false;
 
 }

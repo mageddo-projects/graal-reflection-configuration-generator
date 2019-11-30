@@ -1,12 +1,12 @@
 package nativeimage.core;
 
-import nativeimage.Reflections;
 import nativeimage.Reflection;
+import nativeimage.Reflections;
+import nativeimage.core.domain.ReflectionConfig;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.tools.Diagnostic;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,8 +29,8 @@ public class AnnotationProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		final boolean processingOver = roundEnv.processingOver();
-		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(Reflection.class));
 		processElementsForRepeatableAnnotation(roundEnv);
+		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(Reflection.class));
 		if (processingOver) {
 			writeObjects();
 		}
@@ -40,6 +40,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv) {
 		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Reflections.class);
 		for (Element element : elements) {
+
 			final Reflections annotation = element.getAnnotation(Reflections.class);
 			for (Reflection reflection : annotation.value()) {
 				if(reflection.scanPackage().isEmpty()){
