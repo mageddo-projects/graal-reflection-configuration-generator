@@ -1,6 +1,6 @@
 package nativeimage.core;
 
-import nativeimage.RuntimeReflection;
+import nativeimage.Reflection;
 
 import javax.lang.model.element.Element;
 import java.util.LinkedHashSet;
@@ -13,7 +13,7 @@ public final class ReflectionConfigBuilder {
 		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
 	}
 
-	public static Set<ReflectionConfig> of(Element element, final RuntimeReflection annotation){
+	public static Set<ReflectionConfig> of(Element element, final Reflection annotation){
 		final Set<ReflectionConfig> reflectionConfigs = new LinkedHashSet<>();
 		for (String type : TypeBuilder.of(element, annotation)) {
 			reflectionConfigs.add(
@@ -25,17 +25,17 @@ public final class ReflectionConfigBuilder {
 		return reflectionConfigs;
 	}
 
-	private static ReflectionConfig.ReflectionConfigBuilder toBuilder(RuntimeReflection runtimeReflectionAnn) {
+	private static ReflectionConfig.ReflectionConfigBuilder toBuilder(Reflection reflectionAnn) {
 		return ReflectionConfig
 			.builder()
-			.allPublicConstructors(runtimeReflectionAnn.allPublicConstructors())
-			.allDeclaredConstructors(runtimeReflectionAnn.allDeclaredConstructors())
+			.allPublicConstructors(reflectionAnn.publicConstructors())
+			.allDeclaredConstructors(reflectionAnn.declaredConstructors())
 
-			.allPublicFields(runtimeReflectionAnn.allPublicFields())
-			.allDeclaredFields(runtimeReflectionAnn.allDeclaredFields())
+			.allPublicFields(reflectionAnn.publicFields())
+			.allDeclaredFields(reflectionAnn.declaredFields())
 
-			.allPublicMethods(runtimeReflectionAnn.allPublicMethods())
-			.allDeclaredMethods(runtimeReflectionAnn.allDeclaredMethods())
+			.allPublicMethods(reflectionAnn.publicMethods())
+			.allDeclaredMethods(reflectionAnn.declaredMethods())
 		;
 	}
 }

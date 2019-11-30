@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface RepeatableRuntimeReflection {
-    RuntimeReflection[] value() default {};
+public @interface Reflections {
+    Reflection[] value() default {};
 }

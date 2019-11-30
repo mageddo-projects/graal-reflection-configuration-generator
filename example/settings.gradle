@@ -1,2 +1,3 @@
+rootProject.name = 'graal-reflection-configuration-example'
 include ':graal-reflection-configuration'
 project(':graal-reflection-configuration').projectDir = new File('../')

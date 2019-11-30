@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PACKAGE})
 //@Repeatable(value = RuntimeReflections.class)
-public @interface RuntimeReflection {
+public @interface Reflection {
 
 	/**
 	 * The package to be scanned to generate reflection config, e.g <code>java.lang</code>
@@ -28,16 +28,16 @@ public @interface RuntimeReflection {
 	 */
 	String scanClassName() default "";
 
-	boolean allDeclaredConstructors() default false;
+	boolean declaredConstructors() default false;
 
-	boolean allPublicConstructors() default false;
+	boolean publicConstructors() default false;
 
-	boolean allDeclaredMethods() default false;
+	boolean declaredMethods() default false;
 
-	boolean allPublicMethods() default false;
+	boolean publicMethods() default false;
 
-	boolean allPublicFields() default false;
+	boolean publicFields() default false;
 
-	boolean allDeclaredFields() default false;
+	boolean declaredFields() default false;
 
 }

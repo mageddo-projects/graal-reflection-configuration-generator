@@ -1,8 +1,8 @@
 package com.acme;
 
-import nativeimage.RuntimeReflection;
+import nativeimage.Reflection;
 
-@RuntimeReflection(allDeclaredConstructors = true, allDeclaredFields = true)
+@Reflection(allDeclaredConstructors = true, allDeclaredFields = true)
 public class RuntimeReflectionFruit {
 
 	private String name;

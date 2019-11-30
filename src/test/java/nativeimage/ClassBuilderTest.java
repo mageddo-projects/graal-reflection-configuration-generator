@@ -25,8 +25,8 @@ class ClassBuilderTest {
 		params.put("scanClassName", Pojo.class.getName());
 		params.put("scanClass", Set.class);
 
-		final RuntimeReflection ann = (RuntimeReflection) AnnotationParser.annotationForMap(
-			RuntimeReflection.class, params
+		final Reflection ann = (Reflection) AnnotationParser.annotationForMap(
+			Reflection.class, params
 		);
 
 		// act
@@ -45,8 +45,8 @@ class ClassBuilderTest {
 		params.put("scanClassName", "");
 		params.put("scanClass", Pojo.class);
 
-		final RuntimeReflection ann = (RuntimeReflection) AnnotationParser.annotationForMap(
-			RuntimeReflection.class, params
+		final Reflection ann = (Reflection) AnnotationParser.annotationForMap(
+			Reflection.class, params
 		);
 
 		// act
@@ -67,8 +67,8 @@ class ClassBuilderTest {
 		params.put("scanClass", Void.class);
 		params.put("scanPackage", "nativeimage.vo");
 
-		final RuntimeReflection ann = (RuntimeReflection) AnnotationParser.annotationForMap(
-			RuntimeReflection.class, params
+		final Reflection ann = (Reflection) AnnotationParser.annotationForMap(
+			Reflection.class, params
 		);
 
 		final Element element = Mockito.mock(Element.class);
@@ -98,8 +98,8 @@ class ClassBuilderTest {
 		params.put("scanClass", Void.class);
 		params.put("scanPackage", "");
 
-		final RuntimeReflection ann = (RuntimeReflection) AnnotationParser.annotationForMap(
-			RuntimeReflection.class, params
+		final Reflection ann = (Reflection) AnnotationParser.annotationForMap(
+			Reflection.class, params
 		);
 
 		final Element element = Mockito.mock(Element.class);

@@ -1,20 +1,20 @@
 package com.acme;
 
-import nativeimage.RuntimeReflection;
-import nativeimage.RepeatableRuntimeReflection;
+import nativeimage.Reflection;
+import nativeimage.Reflections;
 
-@RepeatableRuntimeReflection({
-	@RuntimeReflection(
+@Reflections({
+	@Reflection(
 		scanClass = Fruit.class,
 		allDeclaredFields = true, allPublicFields = true,
 		allDeclaredMethods = true, allPublicMethods = true,
 		allDeclaredConstructors = true, allPublicConstructors = true
 	),
-	@RuntimeReflection(
+	@Reflection(
 		scanClassName = "com.acme.Car",
 		allDeclaredConstructors = true, allDeclaredFields = true, allDeclaredMethods = true
 	),
-	@RuntimeReflection(
+	@Reflection(
 		scanPackage = "com.acme.subpackage",
 		allDeclaredFields = true
 	)

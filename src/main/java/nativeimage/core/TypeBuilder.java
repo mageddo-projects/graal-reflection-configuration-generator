@@ -1,6 +1,6 @@
 package nativeimage.core;
 
-import nativeimage.RuntimeReflection;
+import nativeimage.Reflection;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.MirroredTypeException;
@@ -13,23 +13,23 @@ public final class TypeBuilder {
 		throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
 	}
 
-	public static Set<String> of(Element element, RuntimeReflection runtimeReflectionAnn) {
-		if(!runtimeReflectionAnn.scanClassName().equals("")){
-			return toSet(runtimeReflectionAnn.scanClassName());
+	public static Set<String> of(Element element, Reflection reflectionAnn) {
+		if(!reflectionAnn.scanClassName().equals("")){
+			return toSet(reflectionAnn.scanClassName());
 		}
-		final String scanClass = getScanClass(runtimeReflectionAnn);
+		final String scanClass = getScanClass(reflectionAnn);
 		if(!scanClass.equals(Void.class.getName())){
 			return toSet(scanClass);
 		}
-		if(!runtimeReflectionAnn.scanPackage().equals("")){
-			return new PackageClassesDiscover().discover(element, runtimeReflectionAnn.scanPackage());
+		if(!reflectionAnn.scanPackage().equals("")){
+			return new PackageClassesDiscover().discover(element, reflectionAnn.scanPackage());
 		}
 		return toSet(element.toString());
 	}
 
-	private static String getScanClass(RuntimeReflection runtimeReflectionAnn) {
+	private static String getScanClass(Reflection reflectionAnn) {
 		try {
-			return runtimeReflectionAnn.scanClass().getName();
+			return reflectionAnn.scanClass().getName();
 		} catch (MirroredTypeException e){
 			return e.getTypeMirror().toString();
 		}

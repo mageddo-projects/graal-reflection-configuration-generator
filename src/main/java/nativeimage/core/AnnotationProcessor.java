@@ -1,7 +1,7 @@
 package nativeimage.core;
 
-import nativeimage.RepeatableRuntimeReflection;
-import nativeimage.RuntimeReflection;
+import nativeimage.Reflections;
+import nativeimage.Reflection;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -29,7 +29,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		final boolean processingOver = roundEnv.processingOver();
-		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(RuntimeReflection.class));
+		processElementsForAnnotation(annotations.isEmpty(), roundEnv.getElementsAnnotatedWith(Reflection.class));
 		processElementsForRepeatableAnnotation(roundEnv);
 		if (processingOver) {
 			writeObjects();
@@ -38,15 +38,15 @@ public class AnnotationProcessor extends AbstractProcessor {
 	}
 
 	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv) {
-		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RepeatableRuntimeReflection.class);
+		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Reflections.class);
 		for (Element element : elements) {
-			final RepeatableRuntimeReflection annotation = element.getAnnotation(RepeatableRuntimeReflection.class);
-			for (RuntimeReflection runtimeReflection : annotation.value()) {
-				if(runtimeReflection.scanPackage().isEmpty()){
-					addElement(element, runtimeReflection);
+			final Reflections annotation = element.getAnnotation(Reflections.class);
+			for (Reflection reflection : annotation.value()) {
+				if(reflection.scanPackage().isEmpty()){
+					addElement(element, reflection);
 				} else {
 					for (Element nestedElements : roundEnv.getRootElements()) {
-						addElement(nestedElements, runtimeReflection);
+						addElement(nestedElements, reflection);
 					}
 				}
 			}
@@ -58,12 +58,12 @@ public class AnnotationProcessor extends AbstractProcessor {
 	) {
 		if (!hasAnnotations) {
 			for (Element element : annotatedElements) {
-				addElement(element, element.getAnnotation(RuntimeReflection.class));
+				addElement(element, element.getAnnotation(Reflection.class));
 			}
 		}
 	}
 
-	private void addElement(Element element, RuntimeReflection annotation) {
+	private void addElement(Element element, Reflection annotation) {
 		this.classPackage = this.classPackage == null ? ClassUtils.getClassPackage(element.toString()) : this.classPackage;
 		this.classes.addAll(ReflectionConfigBuilder.of(element, annotation));
 	}

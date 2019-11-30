@@ -1,8 +1,9 @@
 package com.acme.vo;
 
-import nativeimage.RuntimeReflection;
 
-@RuntimeReflection(allDeclaredFields = true, allDeclaredMethods = true, allDeclaredConstructors = true)
+import nativeimage.Reflection;
+
+@Reflection(declaredFields = true, declaredMethods = true, declaredConstructors = true)
 public class Fruit {
 
 	private String name;
