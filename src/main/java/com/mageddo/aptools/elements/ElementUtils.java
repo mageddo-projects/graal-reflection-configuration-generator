@@ -1,4 +1,4 @@
-package nativeimage.core;
+package com.mageddo.aptools.elements;
 
 import org.apache.commons.lang3.Validate;
 

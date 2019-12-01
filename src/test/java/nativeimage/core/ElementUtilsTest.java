@@ -1,5 +1,6 @@
 package nativeimage.core;
 
+import com.mageddo.aptools.elements.ElementUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

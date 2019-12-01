@@ -1,5 +1,6 @@
 package nativeimage.core;
 
+import com.mageddo.aptools.elements.ElementUtils;
 import nativeimage.Reflection;
 
 import javax.lang.model.element.Element;

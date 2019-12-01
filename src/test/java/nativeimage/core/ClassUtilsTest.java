@@ -1,5 +1,6 @@
 package nativeimage.core;
 
+import com.mageddo.aptools.ClassUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

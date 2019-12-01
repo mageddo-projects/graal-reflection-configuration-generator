@@ -1,5 +1,8 @@
 package nativeimage.core;
 
+import com.mageddo.aptools.ClassUtils;
+import com.mageddo.aptools.elements.ElementUtils;
+
 import javax.lang.model.element.Element;
 import java.util.Collections;
 import java.util.Set;

@@ -1,6 +1,9 @@
-package nativeimage.core;
+package com.mageddo.aptools;
 
 public class ClassUtils {
+	private ClassUtils() {
+	}
+
 	public static String getClassPackage(String className) {
 		final int lastIndexOf = className.lastIndexOf('.');
 		if(lastIndexOf < 0){

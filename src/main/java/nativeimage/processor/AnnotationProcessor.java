@@ -1,7 +1,12 @@
-package nativeimage.core;
+package nativeimage.processor;
 
+import com.mageddo.aptools.*;
+import com.mageddo.aptools.elements.ElementFinder;
+import com.mageddo.aptools.log.Logger;
+import com.mageddo.aptools.log.LoggerFactory;
 import nativeimage.Reflection;
 import nativeimage.Reflections;
+import nativeimage.core.*;
 import nativeimage.core.domain.ReflectionConfig;
 
 import javax.annotation.processing.*;
@@ -9,7 +14,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -17,16 +21,14 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class AnnotationProcessor extends AbstractProcessor {
 
-	private static final Diagnostic.Kind LEVEL = Diagnostic.Kind.NOTE;
-
+	private Logger logger;
 	private Set<ReflectionConfig> classes;
-	private Messager messager;
 	private String classPackage;
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
 		super.init(processingEnv);
-		this.messager = this.processingEnv.getMessager();
+		this.logger = LoggerFactory.bindLogger(this.processingEnv.getMessager());
 		this.classes = new LinkedHashSet<>();
 	}
 
@@ -69,7 +71,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 				this.addElement(nestedElement, reflection);
 				for (final Element innerClass : ElementFinder.find(nestedElement, ElementKind.CLASS)) {
 					this.addElement(innerClass, reflection);
-					log(Diagnostic.Kind.OTHER, "innerClass=%s", innerClass);
+					logger.debug("innerClass=%s", innerClass);
 				}
 			}
 		}
@@ -78,8 +80,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 	private void addElement(Element element, Reflection annotation) {
 //		final Symbol.ClassSymbol symbol = (Symbol.ClassSymbol) element;
 //		((Symbol.ClassSymbol) element).sourcefile.de
-		log(
-			Diagnostic.Kind.OTHER,
+		logger.debug(
 			"m=addElement, asType=%s, kind=%s, simpleName=%s, enclosing=%s, clazz=%s",
 			element.asType(), element.getKind(), element.getSimpleName(),
 			element.getEnclosingElement(), element.getClass()
@@ -99,23 +100,16 @@ public class AnnotationProcessor extends AbstractProcessor {
 				appender.append(config);
 			}
 		} catch (Throwable e){
-			log(Diagnostic.Kind.ERROR, e.getMessage());
+			logger.error(e.getMessage());
 		} finally {
 			IoUtils.safeClose(appender);
-			log(Diagnostic.Kind.NOTE, "reflection-configuration, written-objects= " + this.classes.size());
-			log(Diagnostic.Kind.OTHER, "objects=%s", this.classes);
+			logger.info("reflection-configuration, written-objects= " + this.classes.size());
+			logger.info("objects=%s", this.classes);
 		}
 	}
 
 	private String getClassPackage() {
 		return this.classPackage == null ? "graal-reflection-configuration" : this.classPackage;
-	}
-
-	private void log(Diagnostic.Kind level, String format, Object ... args) {
-		if(level.ordinal() > LEVEL.ordinal()){
-			return;
-		}
-		messager.printMessage(level, String.format(format, args));
 	}
 
 }
