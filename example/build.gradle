@@ -3,7 +3,7 @@ plugins {
 }
 
 repositories {
-//	mavenLocal()
+	mavenLocal()
 	mavenCentral()
 }
 
@@ -12,7 +12,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 dependencies {
 
 	compileOnly("com.mageddo.nativeimage:reflection-config-generator:2.1.1")
-//	annotationProcessor("com.mageddo.nativeimage:reflection-config-generator:2.1.1")
+	annotationProcessor("com.mageddo.nativeimage:reflection-config-generator:2.1.1")
 
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.10.1")
 }
