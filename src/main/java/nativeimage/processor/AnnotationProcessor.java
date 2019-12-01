@@ -33,11 +33,11 @@ public class AnnotationProcessor extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		try {
-			for (Processor processor : processors) {
+			for (Processor processor : this.processors) {
 				processor.process(new LinkedHashSet<>(annotations), roundEnv);
 			}
 		} catch (Exception e){
-			logger.error("fatal: %s\n ", e.getMessage(), ExceptionUtils.getStackTrace(e));
+			this.logger.error("fatal: %s\n ", e.getMessage(), ExceptionUtils.getStackTrace(e));
 		}
 		return false;
 	}
