@@ -40,6 +40,10 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	testLogging {
+		events "failed"
+		exceptionFormat "full"
+	}
 }
 
 tasks.withType(JavaCompile) {
