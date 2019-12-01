@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import sun.reflect.annotation.AnnotationParser;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Name;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -72,6 +73,7 @@ class ClassBuilderTest {
 		);
 
 		final Element element = Mockito.mock(Element.class);
+		doReturn(ElementKind.CLASS).when(element).getKind();
 		doReturn(expectedClass.getName()).when(element).toString();
 
 		final Name name = Mockito.mock(Name.class);
@@ -103,8 +105,8 @@ class ClassBuilderTest {
 		);
 
 		final Element element = Mockito.mock(Element.class);
+		doReturn(ElementKind.CLASS).when(element).getKind();
 		doReturn(expectedClass.getName()).when(element).toString();
-
 
 		// act
 		final Set<String> classes = TypeBuilder.of(element, ann);

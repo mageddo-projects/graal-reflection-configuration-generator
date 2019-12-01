@@ -28,7 +28,9 @@ allprojects {
 
 dependencies {
 
-	compile ("com.fasterxml.jackson.core:jackson-databind:2.9.8")
+	compile("org.apache.commons:commons-lang3:3.9")
+	compile ("com.fasterxml.jackson.core:jackson-databind:2.10.1")
+	compileOnly files(org.gradle.internal.jvm.Jvm.current().toolsJar)
 
 	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
 	testCompile "org.junit.jupiter:junit-jupiter:5.4.2"
@@ -38,6 +40,10 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	testLogging {
+		events "failed"
+		exceptionFormat "full"
+	}
 }
 
 tasks.withType(JavaCompile) {
@@ -72,7 +78,6 @@ publishing {
 			artifact javadocJar
 			pom {
 				name = project.name
-				artifactId = 'reflection-config-generator'
 				packaging = 'jar'
 				description = project.description
 				url = "${repositoryUrl}"

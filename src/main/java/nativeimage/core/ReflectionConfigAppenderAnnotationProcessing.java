@@ -1,9 +1,11 @@
 package nativeimage.core;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
+import nativeimage.core.domain.ReflectionConfig;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.tools.FileObject;
@@ -52,6 +54,7 @@ public class ReflectionConfigAppenderAnnotationProcessing implements ReflectionC
 		printer.indentArraysWith(indenter);
 
 		return new ObjectMapper()
+			.setSerializationInclusion(Include.NON_NULL)
 			.writer(printer)
 			.writeValuesAsArray(fileObject.openOutputStream())
 			;

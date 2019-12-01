@@ -24,7 +24,7 @@ public final class TypeBuilder {
 		if(!reflectionAnn.scanPackage().equals("")){
 			return new PackageClassesDiscover().discover(element, reflectionAnn.scanPackage());
 		}
-		return toSet(element.toString());
+		return toSet(ElementUtils.toClassName(element));
 	}
 
 	private static String getScanClass(Reflection reflectionAnn) {
