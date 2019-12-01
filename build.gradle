@@ -31,8 +31,6 @@ dependencies {
 	compile("org.apache.commons:commons-lang3:3.9")
 	compile ("com.fasterxml.jackson.core:jackson-databind:2.10.1")
 	compileOnly files(org.gradle.internal.jvm.Jvm.current().toolsJar)
-//	compile("org.slf4j:slf4j-api:1.7.29")
-
 
 	testCompile group: 'commons-io', name: 'commons-io', version: '2.6'
 	testCompile "org.junit.jupiter:junit-jupiter:5.4.2"
