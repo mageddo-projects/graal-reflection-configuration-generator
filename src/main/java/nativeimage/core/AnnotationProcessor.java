@@ -1,6 +1,5 @@
 package nativeimage.core;
 
-import com.sun.tools.javac.code.Symbol;
 import nativeimage.Reflection;
 import nativeimage.Reflections;
 import nativeimage.core.domain.ReflectionConfig;
