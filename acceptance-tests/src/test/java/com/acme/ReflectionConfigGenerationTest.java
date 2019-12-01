@@ -3,6 +3,7 @@ package com.acme;
 import org.junit.jupiter.api.Test;
 
 import static com.acme.TestUtils.getResourceAsString;
+import static com.acme.TestUtils.sortJson;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReflectionConfigGenerationTest {
@@ -15,7 +16,9 @@ class ReflectionConfigGenerationTest {
 		final String reflectJson = getResourceAsString("/META-INF/native-image/com.acme/reflect.json");
 
 		// assert
-		assertEquals(getResourceAsString("/reflection-config-generation-test/001.json"), reflectJson);
+		assertEquals(
+			sortJson(getResourceAsString("/reflection-config-generation-test/001.json")), sortJson(reflectJson)
+		);
 	}
 
 	@Test
