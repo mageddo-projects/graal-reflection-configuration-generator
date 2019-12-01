@@ -1,23 +1,17 @@
 package nativeimage.processor;
 
-import com.mageddo.aptools.*;
-import com.mageddo.aptools.elements.ElementFinder;
+import com.mageddo.aptools.Processor;
 import com.mageddo.aptools.log.Logger;
 import com.mageddo.aptools.log.LoggerFactory;
-import nativeimage.Reflection;
-import nativeimage.Reflections;
-import nativeimage.core.*;
-import nativeimage.core.domain.ReflectionConfig;
+import nativeimage.core.NativeImageReflectionConfigGenerator;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import java.io.IOException;
-import java.rmi.server.ExportException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @SupportedAnnotationTypes("*")
@@ -25,96 +19,27 @@ import java.util.Set;
 public class AnnotationProcessor extends AbstractProcessor {
 
 	private Logger logger;
-	private Set<ReflectionConfig> classes;
-	private String classPackage;
+	private List<Processor> processors;
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
 		super.init(processingEnv);
 		this.logger = LoggerFactory.bindLogger(this.processingEnv.getMessager());
-		this.classes = new LinkedHashSet<>();
+		this.processors = new ArrayList<>();
+		this.processors.add(new NativeImageReflectionConfigGenerator(processingEnv));
+
 	}
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		try {
-			final boolean processingOver = roundEnv.processingOver();
-			processElementsForRepeatableAnnotation(roundEnv);
-			processElementsForAnnotation(roundEnv);
-			if (processingOver) {
-				writeObjects();
+			for (Processor processor : processors) {
+				processor.process(new LinkedHashSet<>(annotations), roundEnv);
 			}
 		} catch (Exception e){
 			logger.error("fatal: %s\n ", e.getMessage(), ExceptionUtils.getStackTrace(e));
 		}
 		return false;
-	}
-
-	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv) {
-		final Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Reflections.class);
-		for (Element element : elements) {
-			processElementsForRepeatableAnnotation(roundEnv, element);
-		}
-	}
-
-	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv, Element element) {
-		final Reflections reflections = element.getAnnotation(Reflections.class);
-		for (final Reflection reflection : reflections.value()) {
-			processElementsForAnnotation(roundEnv, element, reflection);
-		}
-	}
-
-	private void processElementsForAnnotation(RoundEnvironment roundEnv) {
-		for (Element element : roundEnv.getElementsAnnotatedWith(Reflection.class)) {
-			processElementsForAnnotation(roundEnv, element, element.getAnnotation(Reflection.class));
-		}
-	}
-
-	private void processElementsForAnnotation(RoundEnvironment roundEnv, Element element, Reflection reflection) {
-		if(reflection.scanPackage().isEmpty()){
-			this.addElement(element, reflection);
-		} else {
-			for (final Element nestedElement : roundEnv.getRootElements()) {
-				this.addElement(nestedElement, reflection);
-				for (final Element innerClass : ElementFinder.find(nestedElement, ElementKind.CLASS)) {
-					this.addElement(innerClass, reflection);
-					logger.debug("innerClass=%s", innerClass);
-				}
-			}
-		}
-	}
-
-	private void addElement(Element element, Reflection annotation) {
-//		final Symbol.ClassSymbol symbol = (Symbol.ClassSymbol) element;
-//		((Symbol.ClassSymbol) element).sourcefile.de
-		logger.debug(
-			"m=addElement, asType=%s, kind=%s, simpleName=%s, enclosing=%s, clazz=%s",
-			element.asType(), element.getKind(), element.getSimpleName(),
-			element.getEnclosingElement(), element.getClass()
-		);
-		this.classPackage = this.classPackage == null ? ClassUtils.getClassPackage(element.toString()) : this.classPackage;
-		for (ReflectionConfig config : ReflectionConfigBuilder.of(element, annotation)) {
-			this.classes.remove(config);
-			this.classes.add(config);
-		}
-	}
-
-	private void writeObjects() throws IOException {
-		ReflectionConfigAppenderAnnotationProcessing appender = null;
-		try {
-			appender = new ReflectionConfigAppenderAnnotationProcessing(this.processingEnv, getClassPackage());
-			for (ReflectionConfig config : this.classes) {
-				appender.append(config);
-			}
-			logger.info("native-image-reflection-configuration, written-objects=%d", this.classes.size());
-			logger.debug("objects=%s", this.classes);
-		} finally {
-			IoUtils.safeClose(appender);
-		}
-	}
-
-	private String getClassPackage() {
-		return this.classPackage == null ? "graal-reflection-configuration" : this.classPackage;
 	}
 
 }

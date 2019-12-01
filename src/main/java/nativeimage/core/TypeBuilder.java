@@ -1,5 +1,6 @@
 package nativeimage.core;
 
+import com.mageddo.aptools.ClassUtils;
 import com.mageddo.aptools.elements.ElementUtils;
 import nativeimage.Reflection;
 
@@ -23,7 +24,11 @@ public final class TypeBuilder {
 			return toSet(scanClass);
 		}
 		if(!reflectionAnn.scanPackage().equals("")){
-			return new PackageClassesDiscover().discover(element, reflectionAnn.scanPackage());
+			final String className = ElementUtils.toClassName(element);
+			if(ClassUtils.doPackageOwnClass(reflectionAnn.scanPackage(), className)){
+				return Collections.singleton(className);
+			}
+			return Collections.emptySet();
 		}
 		return toSet(ElementUtils.toClassName(element));
 	}

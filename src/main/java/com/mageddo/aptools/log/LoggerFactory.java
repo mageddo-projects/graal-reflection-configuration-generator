@@ -1,5 +1,7 @@
 package com.mageddo.aptools.log;
 
+import org.apache.commons.lang3.Validate;
+
 import javax.annotation.processing.Messager;
 
 public class LoggerFactory {
@@ -8,7 +10,7 @@ public class LoggerFactory {
 	}
 
 	public static Logger getLogger(){
-		return (Logger) System.getProperties().get("aptools.logger");
+		return Validate.notNull((Logger) System.getProperties().get("aptools.logger"), "Logger not found");
 	}
 
 	public static Logger bindLogger(Messager messager) {

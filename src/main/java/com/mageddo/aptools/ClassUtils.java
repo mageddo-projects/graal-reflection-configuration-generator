@@ -11,4 +11,8 @@ public class ClassUtils {
 		}
 		return className.substring(0, lastIndexOf);
 	}
+
+	public static boolean doPackageOwnClass(String packageName, String className) {
+		return getClassPackage(className).contains(packageName);
+	}
 }

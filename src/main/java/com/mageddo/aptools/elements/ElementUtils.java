@@ -1,10 +1,12 @@
 package com.mageddo.aptools.elements;
 
+import com.mageddo.aptools.ClassUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,4 +36,5 @@ public class ElementUtils {
 	private static boolean isTypeElement(Element e){
 		return TYPE_ELEMENTS.contains(e.getKind());
 	}
+
 }
