@@ -4,9 +4,6 @@ import com.acme.vo.Fruit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nativeimage.Reflection;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 @Reflection(declaredConstructors = true, declaredMethods = true, scanPackage = "com.acme.vo")
 public class Main {
 
@@ -17,18 +14,13 @@ public class Main {
 
 		System.out.printf("default constructor by reflection = %s%n", makeInstance(Class.forName("com.acme.vo.Fruit$SubClass")));
 
-		if(args.length > 0 && args[0].equals("true")){
-			final Fruit fruit = om.readValue(fruitJson, Fruit.class);
-			System.out.println("> outer class");
-			System.out.printf("\tparsed = %s%n", fruit);
-			System.out.printf("\tserialized = %s%n", om.writeValueAsString(fruit));
-		}
+		final Fruit fruit = om.readValue(fruitJson, Fruit.class);
+		System.out.println("> outer class");
+		System.out.printf("\tparsed = %s%n", fruit);
+		System.out.printf("\tserialized = %s%n", om.writeValueAsString(fruit));
 
-		new Fruit().setName("xxx");
 		System.out.println("> inner class");
 		System.out.printf("\tserialized = %s%n", om.writeValueAsString(new Fruit.SubClass().setSubClassProp("Stuff")));
-
-
 	}
 
 	private static Object makeInstance(Class<?> clazz) throws Exception {
