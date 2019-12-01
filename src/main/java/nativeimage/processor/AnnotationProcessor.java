@@ -8,12 +8,15 @@ import nativeimage.Reflection;
 import nativeimage.Reflections;
 import nativeimage.core.*;
 import nativeimage.core.domain.ReflectionConfig;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import java.io.IOException;
+import java.rmi.server.ExportException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -34,11 +37,15 @@ public class AnnotationProcessor extends AbstractProcessor {
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		final boolean processingOver = roundEnv.processingOver();
-		processElementsForRepeatableAnnotation(roundEnv);
-		processElementsForAnnotation(roundEnv);
-		if (processingOver) {
-			writeObjects();
+		try {
+			final boolean processingOver = roundEnv.processingOver();
+			processElementsForRepeatableAnnotation(roundEnv);
+			processElementsForAnnotation(roundEnv);
+			if (processingOver) {
+				writeObjects();
+			}
+		} catch (Exception e){
+			logger.error("fatal: %s\n ", e.getMessage(), ExceptionUtils.getStackTrace(e));
 		}
 		return false;
 	}
@@ -92,19 +99,17 @@ public class AnnotationProcessor extends AbstractProcessor {
 		}
 	}
 
-	private void writeObjects() {
+	private void writeObjects() throws IOException {
 		ReflectionConfigAppenderAnnotationProcessing appender = null;
 		try {
 			appender = new ReflectionConfigAppenderAnnotationProcessing(this.processingEnv, getClassPackage());
 			for (ReflectionConfig config : this.classes) {
 				appender.append(config);
 			}
-		} catch (Throwable e){
-			logger.error(e.getMessage());
-		} finally {
-			IoUtils.safeClose(appender);
 			logger.info("native-image-reflection-configuration, written-objects=%d", this.classes.size());
 			logger.debug("objects=%s", this.classes);
+		} finally {
+			IoUtils.safeClose(appender);
 		}
 	}
 
