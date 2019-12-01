@@ -103,8 +103,8 @@ public class AnnotationProcessor extends AbstractProcessor {
 			logger.error(e.getMessage());
 		} finally {
 			IoUtils.safeClose(appender);
-			logger.info("reflection-configuration, written-objects= " + this.classes.size());
-			logger.info("objects=%s", this.classes);
+			logger.info("native-image-reflection-configuration, written-objects=%d", this.classes.size());
+			logger.debug("objects=%s", this.classes);
 		}
 	}
 
