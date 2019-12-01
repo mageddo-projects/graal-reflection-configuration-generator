@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * {@link #scanPackage()}, {@link #scanClass()} or {@link #scanClassName()} instead
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE, ElementType.PACKAGE})
 //@Repeatable(value = RuntimeReflections.class)
 public @interface Reflection {
