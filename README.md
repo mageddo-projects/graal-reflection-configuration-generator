@@ -1,3 +1,7 @@
+## Archived
+
+I wrote a annotatation processor instead, take a look https://github.com/mageddo-projects/annotation-processing-tools/tree/master/reflection-config-generator
+
 Graal Reflection Configuration Generator provides an easy way to
 geenrate GraalVM reflection config files, configure the
 plugin on your gradle project, annotate the desired class class with
