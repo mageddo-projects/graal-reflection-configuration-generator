@@ -1,44 +1,44 @@
 package nativeimage.core;
 
+import com.mageddo.aptools.ClassUtils;
+import com.mageddo.aptools.IoUtils;
+import com.mageddo.aptools.Processor;
+import com.mageddo.aptools.elements.ElementFinder;
+import com.mageddo.aptools.log.Logger;
+import com.mageddo.aptools.log.LoggerFactory;
 import nativeimage.Reflection;
 import nativeimage.Reflections;
 import nativeimage.core.domain.ReflectionConfig;
 
-import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@SupportedAnnotationTypes("*")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
-public class AnnotationProcessor extends AbstractProcessor {
+public class NativeImageReflectionConfigGenerator implements Processor {
 
-	private static final Diagnostic.Kind LEVEL = Diagnostic.Kind.NOTE;
-
-	private Set<ReflectionConfig> classes;
-	private Messager messager;
+	private final Logger logger = LoggerFactory.getLogger();
+	private final ProcessingEnvironment processingEnv;
+	private final Set<ReflectionConfig> classes;
 	private String classPackage;
 
-	@Override
-	public synchronized void init(ProcessingEnvironment processingEnv) {
-		super.init(processingEnv);
-		this.messager = this.processingEnv.getMessager();
+	public NativeImageReflectionConfigGenerator(ProcessingEnvironment processingEnv) {
+		this.processingEnv = processingEnv;
 		this.classes = new LinkedHashSet<>();
 	}
 
 	@Override
-	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+	public void process(Set<TypeElement> annotations, RoundEnvironment roundEnv) {
 		final boolean processingOver = roundEnv.processingOver();
 		processElementsForRepeatableAnnotation(roundEnv);
 		processElementsForAnnotation(roundEnv);
 		if (processingOver) {
 			writeObjects();
 		}
-		return false;
 	}
 
 	private void processElementsForRepeatableAnnotation(RoundEnvironment roundEnv) {
@@ -69,7 +69,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 				this.addElement(nestedElement, reflection);
 				for (final Element innerClass : ElementFinder.find(nestedElement, ElementKind.CLASS)) {
 					this.addElement(innerClass, reflection);
-					log(Diagnostic.Kind.OTHER, "innerClass=%s", innerClass);
+					logger.debug("innerClass=%s", innerClass);
 				}
 			}
 		}
@@ -78,8 +78,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 	private void addElement(Element element, Reflection annotation) {
 //		final Symbol.ClassSymbol symbol = (Symbol.ClassSymbol) element;
 //		((Symbol.ClassSymbol) element).sourcefile.de
-		log(
-			Diagnostic.Kind.OTHER,
+		logger.debug(
 			"m=addElement, asType=%s, kind=%s, simpleName=%s, enclosing=%s, clazz=%s",
 			element.asType(), element.getKind(), element.getSimpleName(),
 			element.getEnclosingElement(), element.getClass()
@@ -98,24 +97,16 @@ public class AnnotationProcessor extends AbstractProcessor {
 			for (ReflectionConfig config : this.classes) {
 				appender.append(config);
 			}
-		} catch (Throwable e){
-			log(Diagnostic.Kind.ERROR, e.getMessage());
+			logger.info("native-image-reflection-configuration, written-objects=%d", this.classes.size());
+			logger.debug("objects=%s", this.classes);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		} finally {
 			IoUtils.safeClose(appender);
-			log(Diagnostic.Kind.NOTE, "reflection-configuration, written-objects= " + this.classes.size());
-			log(Diagnostic.Kind.OTHER, "objects=%s", this.classes);
 		}
 	}
 
 	private String getClassPackage() {
 		return this.classPackage == null ? "graal-reflection-configuration" : this.classPackage;
 	}
-
-	private void log(Diagnostic.Kind level, String format, Object ... args) {
-		if(level.ordinal() > LEVEL.ordinal()){
-			return;
-		}
-		messager.printMessage(level, String.format(format, args));
-	}
-
 }

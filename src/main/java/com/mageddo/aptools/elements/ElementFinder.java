@@ -1,4 +1,4 @@
-package nativeimage.core;
+package com.mageddo.aptools.elements;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -10,6 +10,9 @@ public class ElementFinder {
 	private ElementFinder() {
 	}
 
+	/**
+	 * Find all enclosing elements which match #kind
+	 */
 	public static List<Element> find(Element e, ElementKind kind){
 		final List<Element> elements = new ArrayList<>();
 		find(e, kind, elements);

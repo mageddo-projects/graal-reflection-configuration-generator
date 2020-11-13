@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
+import com.mageddo.aptools.IoUtils;
 import nativeimage.core.domain.ReflectionConfig;
 
 import javax.annotation.processing.ProcessingEnvironment;
